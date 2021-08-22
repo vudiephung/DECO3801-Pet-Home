@@ -25,6 +25,11 @@ module.exports = {
   },
   plugins: ['react', 'react-native', 'react-hooks', 'prettier'],
   rules: {
+    'no-param-reassign': [
+      'error',
+      { props: true, ignorePropertyModificationsForRegex: ['^state'] },
+    ],
+    '@typescript-eslint/no-explicit-any': 'off',
     'prettier/prettier': 'error',
     indent: ['error', 2, { SwitchCase: 1 }],
     quotes: ['error', 'single', { avoidEscape: true }],
