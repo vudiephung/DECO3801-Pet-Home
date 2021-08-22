@@ -1,22 +1,34 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Provider } from 'react-redux';
 
-import Header from './src/components/Header';
+import SignIn from './src/containers/auth/SignIn';
+import SignUp from './src/containers/auth/SignUp';
+import Main from './src/containers/main/Main';
+import store from './src/store';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const Stack = createStackNavigator();
 
-export default function App() {
+const App = () => {
+  const isAuthenticated = false;
+
   return (
-    <View style={styles.container}>
-      <Header />
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
+    <Provider store={store}>
+      <NavigationContainer>
+        {isAuthenticated ? (
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        ) : (
+          <Stack.Navigator initialRouteName="Signin">
+            <Stack.Screen name="SignIn" component={SignIn} />
+            <Stack.Screen name="SignUp" component={SignUp} />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </Provider>
   );
-}
+};
+
+export default App;
