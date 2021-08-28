@@ -8,7 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'airbnb-typescript',
     'eslint:recommended',
-    'plugin:react/recommended',
+    'plugin:prettier/recommended',
   ],
   overrides: [
     {
@@ -25,6 +25,9 @@ module.exports = {
   },
   plugins: ['react', 'react-native', 'react-hooks', 'prettier'],
   rules: {
+    'global-require': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/require-default-props': 'off',
     'no-param-reassign': [
       'error',
       { props: true, ignorePropertyModificationsForRegex: ['^state'] },
