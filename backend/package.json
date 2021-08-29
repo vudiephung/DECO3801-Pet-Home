@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon src/server.ts",
     "build": "tsc -p ."
   },
   "author": "Team Resilience",
