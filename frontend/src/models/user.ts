@@ -6,6 +6,7 @@ export interface User {
   email: string;
   password: string;
   token: string;
+  username: string;
   // isShelter: boolean;
   // adress?: string;
   // contactNumber?: string;

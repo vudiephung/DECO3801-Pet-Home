@@ -7,8 +7,8 @@ import { User } from '../models/user';
 import { AppState } from '.';
 
 interface UserState {
-  // user: User | null;
   userId: string | null;
+  username: string | null;
   loading: boolean;
   didLogin: boolean;
   token: string | null;
@@ -37,6 +37,7 @@ const deleteData = async (key: string) => {
 
 export const createInitialState = (): UserState => ({
   userId: null,
+  username: null,
   token: null,
   loading: false,
   didLogin: false,
@@ -87,6 +88,7 @@ const usersSlice = createSlice({
       state.didLogin = true;
       state.token = action.payload.token;
       state.userId = action.payload.userId;
+      state.username = action.payload.username;
       state.loading = false;
     });
     builder.addCase(doSignin.rejected, (state, action) => {
