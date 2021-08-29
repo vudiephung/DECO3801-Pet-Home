@@ -1,11 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Axios, { AxiosResponse } from 'axios';
 import { AuthService } from '../services';
 import { User } from '../models/user';
+import { AppState } from '.';
 
-interface AuthState {
+interface UserState {
   // user: User | null;
   userId: string | null;
   loading: boolean;
@@ -13,6 +14,8 @@ interface AuthState {
   token: string | null;
   errors: any[];
 }
+
+export const USER_FEATURE_KEY = 'user';
 
 const tokenKey: string = 'token';
 
@@ -32,7 +35,7 @@ const deleteData = async (key: string) => {
   }
 };
 
-export const createInitialState = (): AuthState => ({
+export const createInitialState = (): UserState => ({
   userId: null,
   token: null,
   loading: false,
@@ -50,7 +53,7 @@ export const doSignin = createAsyncThunk(
       const user = await AuthService.signin(credential.userInfo);
       // const { token } = user;
       // storeData(tokenKey, token);
-      return { user };
+      return user;
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -74,7 +77,7 @@ export const doSignout = createAsyncThunk('auth/signout', () => {
 });
 
 const usersSlice = createSlice({
-  name: 'user',
+  name: USER_FEATURE_KEY,
   initialState: createInitialState(),
   reducers: {},
   extraReducers: (builder) => {
@@ -82,11 +85,10 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doSignin.fulfilled, (state, action) => {
-      const { user } = action.payload;
-      state.token = user.token;
-      state.userId = user.userId;
-      state.loading = false;
       state.didLogin = true;
+      state.token = action.payload.token;
+      state.userId = action.payload.userId;
+      state.loading = false;
     });
     builder.addCase(doSignin.rejected, (state, action) => {
       const { payload } = action;
@@ -117,5 +119,12 @@ const usersSlice = createSlice({
     });
   },
 });
+
+const selectAuthFeature = (state: AppState) => state[USER_FEATURE_KEY];
+
+export const selectIsAuthenticated = createSelector(
+  selectAuthFeature,
+  (userState) => userState.didLogin,
+);
 
 export default usersSlice.reducer;
