@@ -51,8 +51,7 @@ export const doSignin = createAsyncThunk(
   ) => {
     try {
       const user = await AuthService.signin(credential.userInfo);
-      // const { token } = user;
-      // storeData(tokenKey, token);
+      storeData(tokenKey, user.token);
       return user;
     } catch (e) {
       return rejectWithValue(e);
