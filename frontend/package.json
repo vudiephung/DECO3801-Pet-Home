@@ -5,22 +5,29 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.7",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^6.0.7",
     "@reduxjs/toolkit": "^1.6.1",
+    "axios": "^0.21.1",
     "expo": "~42.0.1",
     "expo-status-bar": "~1.0.4",
+    "jest": "^27.1.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-paper": "^4.9.2",
+    "react-native-screens": "^3.6.0",
     "react-native-web": "~0.13.12",
-    "react-redux": "^7.2.4"
+    "react-redux": "^7.2.4",
+    "redux-mock-store": "^1.5.4",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -40,5 +47,6 @@
     "prettier": "^2.3.2",
     "typescript": "~4.0.0"
   },
-  "private": true
+  "private": true,
+  "proxy": "http://localhost:5000"
 }

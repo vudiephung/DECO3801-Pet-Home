@@ -13,22 +13,15 @@ import theme from './src/core/theme';
 const Stack = createStackNavigator();
 
 const App = () => {
-  const isAuthenticated = false;
-
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          {isAuthenticated ? (
-            <Stack.Navigator initialRouteName="Main">
-              <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
-            </Stack.Navigator>
-          ) : (
-            <Stack.Navigator initialRouteName="Signin">
-              <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
-              <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-            </Stack.Navigator>
-          )}
+          <Stack.Navigator initialRouteName="Signin">
+            <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
+            <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
+            <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+          </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
     </Provider>
