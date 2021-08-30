@@ -1,8 +1,5 @@
-import Axios from 'axios';
-
+import instance from './config';
 import { User } from '../models/user';
-
-const instance = Axios.create({ baseURL: 'http://localhost:5000' });
 
 export const signin = async (credential: Required<Pick<User, 'email' | 'password'>>) =>
   (await instance.post<User>('/signin', credential)).data;
