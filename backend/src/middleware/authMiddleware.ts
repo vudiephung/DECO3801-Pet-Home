@@ -9,6 +9,7 @@ const verifyAccess = (req: any, res: any, next: any) => {
       if (err) {
         res.status(400).json({ error: 'Authentication failed: access denied' });
       } else {
+        req.userId = decodedToken.userId;
         next();
       }
     });

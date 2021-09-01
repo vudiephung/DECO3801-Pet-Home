@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title>Pet Home | Shelter Signup</title>
+  </head>
+  <body>
+    <nav>
+      <h1>Pet Home</h1>
+    </nav>
+
+    <div id="signup-form">
+      <h2 id="form-title">Sign Up for Shelter User</h2>
+      <form action="/shelter-signup" method="post">
+        <div class="form-item">
+          <label for="email">Email</label>
+          <input type="text" name="email" required />
+        </div>
+        <div class="form-item">
+          <label for="username">Username</label>
+          <input type="text" name="username" required />
+        </div>
+        <div class="form-item">
+          <label for="password">Password</label>
+          <input type="password" name="password" required />
+        </div>
+        <div class="form-item">
+          <label for="address">Address</label>
+          <input type="text" name="address" required />
+        </div>
+        <div class="form-item">
+          <label for="contactNumber">Contact Number</label>
+          <input type="text" name="contactNumber" required />
+        </div>
+        <button>Sign Up</button>
+      </form>
+    </div>
+
+    <div class="footer">Copyright &copy; DECO3801 | Team Resilience 2021</div>
+  </body>
+</html>

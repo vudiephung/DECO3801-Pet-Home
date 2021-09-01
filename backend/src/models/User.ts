@@ -13,6 +13,25 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
   },
+  isShelter: {
+    type: Boolean,
+  },
+  address: {
+    // Only for shelter
+    type: String,
+  },
+  contactNumber: {
+    // Only for shelter
+    type: String,
+  },
+  ownedPets: {
+    // List of IDs. Only for shelter
+    type: [String],
+  },
+  favoritePets: {
+    // List of IDs. Only for user
+    type: [String],
+  },
 });
 
 userSchema.pre('save', async function (next) {
