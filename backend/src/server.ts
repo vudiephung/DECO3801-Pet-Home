@@ -1,11 +1,16 @@
 import express from 'express';
 import mongoose from 'mongoose';
-
 import verifyAccess from './middleware/authMiddleware';
 import authRouter from './routes/authRoutes';
+import adoptionRouter from './routes/adoptionRoutes';
 
 const app = express();
 
+app.set('view engine', 'ejs');
+
+app.use(express.static('public'));
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -31,3 +36,5 @@ app.get('/', verifyAccess, (req, res) => {
 });
 
 app.use(authRouter);
+
+app.use(adoptionRouter);
