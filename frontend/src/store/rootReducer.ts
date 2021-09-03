@@ -1,10 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import usersReducer, * as fromUsers from './userSlice';
+import userReducer, * as fromUser from './userSlice';
+import petsReducer, * as fromPets from './petsSlice';
 
 const rootReducer = combineReducers({
-  [fromUsers.USER_FEATURE_KEY]: usersReducer,
+  [fromUser.USER_FEATURE_KEY]: userReducer,
+  [fromPets.PETS_FEATURE_KEY]: petsReducer,
 });
 
-export { fromUsers };
+export { fromUser, fromPets };
 export default rootReducer;

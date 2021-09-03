@@ -7,8 +7,7 @@ import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import theme from '../../core/theme';
-
-import { fromUsers, useAppDispatch } from '../../store';
+import { fromUser, useAppDispatch } from '../../store';
 
 interface SignUpFormInputs {
   email: string;
@@ -39,7 +38,7 @@ const SignUp = ({ navigation }: any) => {
 
   const handleSignUp = async ({ email, password, confirmPassword }: SignUpFormInputs) => {
     if (password == confirmPassword) {
-      await dispatch(fromUsers.doSignup({ userInfo: { email, password, username } }));
+      await dispatch(fromUser.doSignup({ userInfo: { email, password, username } }));
       navigation.navigate('SignIn');
     }
   };

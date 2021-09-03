@@ -1,17 +1,15 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Axios, { AxiosResponse } from 'axios';
+
 import { AuthService } from '../services';
 import { User } from '../models/user';
-import { AppState } from '.';
+import { Pet } from '../models/pet';
+import { AppState, fromPets } from '.';
 
 interface UserState {
-  userId: string | null;
-  username: string | null;
+  user: User | null;
   loading: boolean;
   didLogin: boolean;
-  token: string | null;
   errors: any[];
 }
 
@@ -36,9 +34,7 @@ const deleteData = async (key: string) => {
 };
 
 export const createInitialState = (): UserState => ({
-  userId: null,
-  username: null,
-  token: null,
+  user: null,
   loading: false,
   didLogin: false,
   errors: [],
@@ -76,7 +72,31 @@ export const doSignout = createAsyncThunk('auth/signout', () => {
   deleteData(tokenKey);
 });
 
-const usersSlice = createSlice({
+export const doAddToWishlist = createAsyncThunk(
+  '/addToWishlist',
+  async (petId: Pet['petId'], { rejectWithValue }) => {
+    try {
+      // TODO
+      return petId;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
+export const doRemoveFromWishlist = createAsyncThunk(
+  '/removeFromWishlist',
+  async (petId: Pet['petId'], { rejectWithValue }) => {
+    try {
+      // TODO
+      return petId;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
+const userSlice = createSlice({
   name: USER_FEATURE_KEY,
   initialState: createInitialState(),
   reducers: {},
@@ -85,16 +105,13 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doSignin.fulfilled, (state, action) => {
+      state.user = action.payload;
       state.didLogin = true;
-      state.token = action.payload.token;
-      state.userId = action.payload.userId;
-      state.username = action.payload.username;
       state.loading = false;
     });
     builder.addCase(doSignin.rejected, (state, action) => {
       const { payload } = action;
-      state.userId = null;
-      state.token = null;
+      state.user = null;
       state.loading = false;
       deleteData(tokenKey);
       state.errors.push(payload);
@@ -114,9 +131,18 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doSignout.fulfilled, (state) => {
-      state.userId = null;
-      state.token = null;
+      state.didLogin = true;
+      state.user = null;
       state.loading = false;
+    });
+    builder.addCase(doAddToWishlist.fulfilled, (state, action) => {
+      state.user?.favouritePets?.push(action.payload);
+    });
+    builder.addCase(doRemoveFromWishlist.fulfilled, (state, action) => {
+      const index = state.user?.favouritePets?.indexOf(action.payload);
+      if (index && index > -1) {
+        state.user?.favouritePets?.splice(index, 1);
+      }
     });
   },
 });
@@ -128,4 +154,12 @@ export const selectIsAuthenticated = createSelector(
   (userState) => userState.didLogin,
 );
 
-export default usersSlice.reducer;
+export const selectFavouritePets = createSelector(
+  selectAuthFeature,
+  fromPets.selectEntities,
+  (userState, petEntities) => {
+    return userState.user?.favouritePets?.map((i) => petEntities[i]);
+  },
+);
+
+export default userSlice.reducer;

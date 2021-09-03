@@ -26,6 +26,8 @@ module.exports = {
   },
   plugins: ['react', 'react-native', 'react-hooks', 'prettier'],
   rules: {
+    '@typescript-eslint/no-shadow': 'off',
+    'import/no-cycle': 'off',
     'global-require': 'off',
     'react/jsx-props-no-spreading': 'off',
     'react/require-default-props': 'off',
