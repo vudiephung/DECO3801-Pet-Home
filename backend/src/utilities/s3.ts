@@ -28,8 +28,19 @@ export const uploadImage = (file: any) => {
 };
 
 export const fetchImage = (imageKey: string) => {
-  return s3.getObject({
-    Bucket: imageBucket,
-    Key: imageKey,
-  }).createReadStream;
+  return s3
+    .getObject({
+      Bucket: imageBucket,
+      Key: imageKey,
+    })
+    .createReadStream();
+};
+
+export const deleteImage = (imageKey: string) => {
+  return s3
+    .deleteObject({
+      Bucket: imageBucket,
+      Key: imageKey,
+    })
+    .promise();
 };

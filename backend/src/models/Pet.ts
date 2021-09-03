@@ -13,8 +13,8 @@ const petSchema = new mongoose.Schema({
   age: {
     type: Number,
   },
-  pictures: {
-    // Multiple S3 IDs of pictures
+  images: {
+    // Multiple S3 IDs of images
     type: [String],
   },
   description: {

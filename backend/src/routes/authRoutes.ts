@@ -36,6 +36,8 @@ router.post('/shelter-signup', async (req, res, next) => {
       userId: user._id,
       username: username,
       isShelter: user.isShelter,
+      address: user.address,
+      contactNumber: user.contactNumber,
       token: token,
     });
   } catch (err) {
