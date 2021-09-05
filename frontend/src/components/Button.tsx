@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     marginVertical: 10,
-    backgroundColor: '#caff8a',
+    backgroundColor: theme.colors.button,
   },
   text: {
     fontWeight: 'bold',
