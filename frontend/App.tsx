@@ -7,6 +7,8 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import SignIn from './src/containers/auth/SignIn';
 import SignUp from './src/containers/auth/SignUp';
 import Main from './src/containers/main/Main';
+import AddPet from './src/containers/add-pet/AddPet';
+import PickImages from './src/containers/add-pet/PickImages';
 import store from './src/store';
 import theme from './src/core/theme';
 
@@ -21,6 +23,12 @@ const App = () => {
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
             <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+            <Stack.Screen name="AddPet" component={AddPet} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="PickImages"
+              component={PickImages}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
