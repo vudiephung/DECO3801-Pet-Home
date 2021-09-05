@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as jwt from 'jsonwebtoken';
-import User from '../models/User';
+import User, { hashPassword } from '../models/User';
 import bcrytp from 'bcrypt';
 import secret from '../jwtSecret';
 
@@ -21,10 +21,11 @@ router.get('/shelter-signup', (req, res, next) => {
 router.post('/shelter-signup', async (req, res, next) => {
   const { email, username, password, address, contactNumber } = req.body;
   try {
+    const hashedPassword = await hashPassword(password);
     const user: any = await User.create({
       email,
       username,
-      password,
+      password: hashedPassword,
       isShelter: true,
       address,
       contactNumber,
@@ -51,10 +52,11 @@ router.post('/shelter-signup', async (req, res, next) => {
 router.post('/signup', async (req, res) => {
   const { email, username, password } = req.body;
   try {
+    const hashedPassword = await hashPassword(password);
     const user: any = await User.create({
       email,
       username,
-      password,
+      password: hashedPassword,
       isShelter: false,
       ownedPets: null,
       favoritePets: [],

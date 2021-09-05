@@ -79,7 +79,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
     const shelterUser = await User.findById((req as any).userId).exec();
     shelterUser.ownedPets.push(pet._id);
     await shelterUser.save();
-    res.status(201).json({ success: (pet as any).images });
+    res.status(201).json({ petId: pet._id, images: (pet as any).images });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Something went wrong' });
