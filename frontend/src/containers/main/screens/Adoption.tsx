@@ -115,7 +115,8 @@ const Adoption = () => {
       <CardItem
         item={item}
         onPress={() => {
-          setSelectedId(item.id);
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          !selectedId ? setSelectedId(item.id) : setSelectedId(null);
         }}
         visible={visible}
       />

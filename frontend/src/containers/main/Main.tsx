@@ -1,21 +1,30 @@
-import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Adoption from './screens/Adoption';
+import AdoptionShelter from './screens/Adoption-shelter';
 import Blog from './screens/Blog';
-import Location from './screens/Location';
 import Donation from './screens/Donation';
+import Location from './screens/Location';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const Main = () => (
   <Tab.Navigator activeColor="#34e5ff" barStyle={{ backgroundColor: '#ffffff' }} labeled={false}>
-    <Tab.Screen
+    {/* <Tab.Screen
       name="Adoption"
       component={Adoption}
       options={{
         tabBarLabel: 'Adoption',
+        tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
+      }}
+    /> */}
+    <Tab.Screen
+      name="AdoptionShelter"
+      component={AdoptionShelter}
+      options={{
+        tabBarLabel: 'AdoptionShelter',
         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
       }}
     />
