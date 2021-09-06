@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
 
+import CustomAppbar from './src/components/CustomAppbar';
 import SignIn from './src/containers/auth/SignIn';
 import SignUp from './src/containers/auth/SignUp';
 import Main from './src/containers/main/Main';
@@ -19,7 +20,7 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Signin">
+          <Stack.Navigator initialRouteName="Main" screenOptions={{ header: CustomAppbar }}>
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
             <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />

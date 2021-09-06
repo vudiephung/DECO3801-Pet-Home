@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 import TextInput from '../../components/TextInput';
-import { useAppDispatch } from '../../store';
 
 const styles = StyleSheet.create({
   center: {},
