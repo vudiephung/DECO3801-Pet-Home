@@ -42,7 +42,7 @@ router.post('/shelter-signup', async (req, res, next) => {
       token: token,
     });
   } catch (err) {
-    if (err.code === 11000) {
+    if ((err as any).code === 11000) {
       res.status(400).json({ error: 'Email address already registered' });
     }
   }
@@ -70,7 +70,7 @@ router.post('/signup', async (req, res) => {
     });
   } catch (err) {
     // Email duplication
-    if (err.code == 11000) {
+    if ((err as any).code == 11000) {
       res.status(400).json({ error: 'Email address already registered' });
     }
   }
