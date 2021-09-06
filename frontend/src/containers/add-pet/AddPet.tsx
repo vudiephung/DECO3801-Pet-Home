@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
 import TextInput from '../../components/TextInput';
+import { useAppDispatch } from '../../store';
 
 const styles = StyleSheet.create({
   center: {},
@@ -34,6 +35,7 @@ const AddPet = ({ navigation }: any) => {
   const [type, setType] = useState<string>('');
   const [breed, setBreed] = useState<string>('');
   const [age, setAge] = useState<number | null>(null);
+  const [description, setDescription] = useState<string[]>([]);
 
   return (
     <View style={styles.modalView}>
@@ -66,9 +68,14 @@ const AddPet = ({ navigation }: any) => {
         maxLength={3}
         onChangeText={(value) => setAge(+value)}
       />
-      <TextInput label="Description" multiline numberOfLines={7} />
+      <TextInput
+        label="Description"
+        multiline
+        numberOfLines={7}
+        onChangeText={(value) => setDescription(value.split(/\r?\n/))}
+      />
       <TouchableOpacity
-        onPress={() => navigation.navigate('PickImages', { name, type, breed, age })}>
+        onPress={() => navigation.navigate('PickImages', { name, type, breed, age, description })}>
         <Text style={styles.add}>Choose Images</Text>
       </TouchableOpacity>
     </View>

@@ -1,9 +1,9 @@
 export interface Pet {
-  petId: number;
+  petId: string;
   name: string;
   type: string;
   breed: string;
   age: number;
-  picture: string;
+  images: string[];
   description: string[];
 }

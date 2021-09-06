@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
-import { Alert, SafeAreaView, StyleSheet } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AssetsSelector } from 'expo-images-picker';
 import { MediaType } from 'expo-media-library';
 import Constants from 'expo-constants';
 
 import theme from '../../core/theme';
+import { fromPets, useAppDispatch } from '../../store';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,12 +17,13 @@ const styles = StyleSheet.create({
 });
 
 const PickImages = ({ route, navigation }: any) => {
-  const { name, type, breed, age } = route.params;
-  console.log(name, type, breed, age);
+  const dispatch = useAppDispatch();
 
   const onSuccess = (data: any) => {
-    console.log(data);
-    Alert.alert('Done', `${data.length}Images selected`);
+    const images = data.map((element: any) => {
+      return { uri: element.uri, name: element.filename };
+    });
+    dispatch(fromPets.doAddPet({ petInfo: route.params, images }));
   };
 
   const widgetErrors = useMemo(

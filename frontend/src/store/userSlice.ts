@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { AuthService } from '../services';
+import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
 import { Pet } from '../models/pet';
 import { AppState, fromPets } from '.';
@@ -10,7 +10,7 @@ interface UserState {
   user: User | null;
   loading: boolean;
   didLogin: boolean;
-  errors: any[];
+  // errors: any[];
 }
 
 export const USER_FEATURE_KEY = 'user';
@@ -37,7 +37,7 @@ export const createInitialState = (): UserState => ({
   user: null,
   loading: false,
   didLogin: false,
-  errors: [],
+  // errors: [],
 });
 
 export const doSignin = createAsyncThunk(
@@ -72,11 +72,11 @@ export const doSignout = createAsyncThunk('auth/signout', () => {
   deleteData(tokenKey);
 });
 
-export const doAddToWishlist = createAsyncThunk(
-  '/addToWishlist',
+export const doAddFavoritePet = createAsyncThunk(
+  '/addFavoritePet',
   async (petId: Pet['petId'], { rejectWithValue }) => {
     try {
-      // TODO
+      await PetsService.addFavoritePet(petId);
       return petId;
     } catch (e) {
       return rejectWithValue(e);
@@ -84,11 +84,11 @@ export const doAddToWishlist = createAsyncThunk(
   },
 );
 
-export const doRemoveFromWishlist = createAsyncThunk(
-  '/removeFromWishlist',
+export const doDeleteFavoritePet = createAsyncThunk(
+  '/deleteFavoritePet',
   async (petId: Pet['petId'], { rejectWithValue }) => {
     try {
-      // TODO
+      await PetsService.deleteFavoritePet(petId);
       return petId;
     } catch (e) {
       return rejectWithValue(e);
@@ -109,12 +109,11 @@ const userSlice = createSlice({
       state.didLogin = true;
       state.loading = false;
     });
-    builder.addCase(doSignin.rejected, (state, action) => {
-      const { payload } = action;
+    builder.addCase(doSignin.rejected, (state) => {
       state.user = null;
       state.loading = false;
       deleteData(tokenKey);
-      state.errors.push(payload);
+      // state.errors.push(payload);
     });
     builder.addCase(doSignup.pending, (state) => {
       state.loading = true;
@@ -122,10 +121,9 @@ const userSlice = createSlice({
     builder.addCase(doSignup.fulfilled, (state) => {
       state.loading = false;
     });
-    builder.addCase(doSignup.rejected, (state, action) => {
-      const { payload } = action;
+    builder.addCase(doSignup.rejected, (state) => {
       state.loading = false;
-      state.errors.push(payload);
+      // state.errors.push(payload);
     });
     builder.addCase(doSignout.pending, (state) => {
       state.loading = true;
@@ -135,13 +133,19 @@ const userSlice = createSlice({
       state.user = null;
       state.loading = false;
     });
-    builder.addCase(doAddToWishlist.fulfilled, (state, action) => {
-      state.user?.favouritePets?.push(action.payload);
+    builder.addCase(doAddFavoritePet.fulfilled, (state, action) => {
+      if (state.user && !state.user.favouritePets) {
+        state.user.favouritePets = [action.payload];
+      } else if (state.user && state.user.favouritePets) {
+        state.user.favouritePets.push(action.payload);
+      }
     });
-    builder.addCase(doRemoveFromWishlist.fulfilled, (state, action) => {
-      const index = state.user?.favouritePets?.indexOf(action.payload);
-      if (index && index > -1) {
-        state.user?.favouritePets?.splice(index, 1);
+    builder.addCase(doDeleteFavoritePet.fulfilled, (state, action) => {
+      if (state.user && state.user.favouritePets) {
+        const index = state.user.favouritePets.indexOf(action.payload);
+        if (index > -1) {
+          state.user.favouritePets.splice(index, 1);
+        }
       }
     });
   },
@@ -152,14 +156,6 @@ const selectAuthFeature = (state: AppState) => state[USER_FEATURE_KEY];
 export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
   (userState) => userState.didLogin,
-);
-
-export const selectFavouritePets = createSelector(
-  selectAuthFeature,
-  fromPets.selectEntities,
-  (userState, petEntities) => {
-    return userState.user?.favouritePets?.map((i) => petEntities[i]);
-  },
 );
 
 export default userSlice.reducer;
