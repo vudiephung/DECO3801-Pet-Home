@@ -32,11 +32,11 @@ router.get('/filtered-pets/:type', verifyAccess, async(req, res, next) => {
   try {
     let checkType = req.params.type;
     if (checkType == "dog") {
-      const dogPet= await Pet.findOne({ type: 'dog' }).exec();
+      const dogPet= await Pet.find({ type: 'dog' }).exec();
       res.status(200).json(dogPet); 
     }  
     if (checkType == "cat") {
-      const catPet= await Pet.findOne({ type: 'cat' }).exec();
+      const catPet= await Pet.find({ type: 'cat' }).exec();
       res.status(200).json(catPet);
     }  
     
@@ -46,14 +46,16 @@ router.get('/filtered-pets/:type', verifyAccess, async(req, res, next) => {
   }
 });
 
-//retrieve every users'favorite pets 
+//retrieve every user'favorite pets 
 router.get('/user-favorite-pets', verifyAccess, async(req, res, next) => {
   try {
     const user = await User.findById((req as any).userId).exec();
-    // const userFavorite = await user.favoritePets;
-    // if ( userFavorite != 'null' && userFavorite != "") {
-    res.status(200).json(user.favoritePets);
-    // }
+    const favPets = [];
+    for (let i = 0; i < user.favoritePets.length; i++) {
+      let pet = await Pet.findById(user.favoritePets[i]).exec();
+      favPets.push(pet);
+    }
+    res.status(200).json(favPets);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Something went wrong' });
@@ -91,10 +93,15 @@ router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res, next)
 
 // retrieve petIds owned by a single Shelter
 router.get('/shelter-owned-pets', verifyAccess, async(req, res, next) => {
-  
   try {
     const shelterUser = await User.findById((req as any).userId).exec();
-    res.status(200).json(shelterUser.ownedPets);
+    const ownedPets = [];
+    for (let i = 0; i < shelterUser.ownedPets.length; i++) {
+      let pet = await Pet.findById(shelterUser.ownedPets[i]).exec();
+      ownedPets.push(pet);
+    }
+    res.status(200).json(ownedPets);
+    console.log(ownedPets);
 
   } catch (err) {
     console.log(err);
