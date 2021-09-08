@@ -20,7 +20,7 @@ const App = () => {
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Main" screenOptions={{ header: CustomAppbar }}>
+          <Stack.Navigator initialRouteName="SignIn" screenOptions={{ header: CustomAppbar }}>
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
             <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />

@@ -19,11 +19,12 @@ const styles = StyleSheet.create({
 const PickImages = ({ route, navigation }: any) => {
   const dispatch = useAppDispatch();
 
-  const onSuccess = (data: any) => {
+  const onSuccess = async (data: any) => {
     const images = data.map((element: any) => {
       return { uri: element.uri, name: element.filename };
     });
-    dispatch(fromPets.doAddPet({ petInfo: route.params, images }));
+    await dispatch(fromPets.doAddPet({ petInfo: route.params, images }));
+    navigation.navigate('Adoption');
   };
 
   const widgetErrors = useMemo(

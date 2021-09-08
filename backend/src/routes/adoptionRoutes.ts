@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import * as fs from 'fs/promises';
 import multer from 'multer';
+
 import User from '../models/User';
 import Pet from '../models/Pet';
 import verifyAccess from '../middleware/authMiddleware';
@@ -24,7 +25,7 @@ router.get('/filtered-pets/:type', verifyAccess, (req, res, next) => {});
 router.get('/user-favorite-pets', verifyAccess, (req, res, next) => {});
 
 router.post('/user-add-favorite/:petId', verifyAccess, async (req, res, next) => {
-  const petId = req.params.petId;
+  const { petId } = req.params;
   try {
     const user = await User.findById((req as any).userId).exec();
     user.favoritePets.push(petId);
@@ -37,7 +38,7 @@ router.post('/user-add-favorite/:petId', verifyAccess, async (req, res, next) =>
 });
 
 router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res, next) => {
-  const petId = req.params.petId;
+  const { petId } = req.params;
   try {
     const user = await User.findById((req as any).userId).exec();
     const petIndex = user.favoritePets.indexOf(petId);
@@ -68,12 +69,12 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
     // Create the new Pet document
     const { name, type, breed, age, description } = req.body;
     const pet = await Pet.create({
-      name: name,
-      type: type,
-      breed: breed,
-      age: age,
+      name,
+      type,
+      breed,
+      age,
       images: imageKeys,
-      description: description,
+      description,
     });
     // Add Pet's ID to list in shelter User document
     const shelterUser = await User.findById((req as any).userId).exec();
@@ -87,7 +88,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
 });
 
 router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, async (req, res, next) => {
-  const petId = req.params.petId;
+  const { petId } = req.params;
   const { name, type, breed, age, description, imagesToDelete } = req.body;
   try {
     // Find the pet document and update its name, type, breed, age, description
@@ -123,7 +124,7 @@ router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, a
 });
 
 router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res, next) => {
-  const petId = req.params.petId;
+  const { petId } = req.params;
   try {
     // Find shelter user doc and remove petId from ownedPets
     const shelterUser = await User.findById((req as any).userId).exec();

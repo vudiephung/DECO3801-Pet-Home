@@ -1,5 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import instance from './config';
 import { Pet } from '../models/pet';
 
@@ -19,9 +17,6 @@ export const addPet = async (
     formData.append('image', { uri: item.uri, type: 'image/jpeg', name: item.name });
   });
 
-  const token = await AsyncStorage.getItem('token');
-  formData.append('token', token);
-
   const res = await instance.post('/shelter-add-pet', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -31,16 +26,13 @@ export const addPet = async (
 };
 
 export const deletePet = async (petId: Pet['petId']) => {
-  const token = await AsyncStorage.getItem('token');
-  return (await instance.delete(`/shelter-delete-pet/${petId}`, { data: { token } })).data;
+  return (await instance.delete(`/shelter-delete-pet/${petId}`)).data;
 };
 
 export const addFavoritePet = async (petId: Pet['petId']) => {
-  const token = await AsyncStorage.getItem('token');
-  return (await instance.post(`/user-add-favorite/${petId}`, { token })).data;
+  return (await instance.post(`/user-add-favorite/${petId}`)).data;
 };
 
 export const deleteFavoritePet = async (petId: Pet['petId']) => {
-  const token = await AsyncStorage.getItem('token');
-  return (await instance.post(`/user-delete-favorite/${petId}`, { token })).data;
+  return (await instance.post(`/user-delete-favorite/${petId}`)).data;
 };

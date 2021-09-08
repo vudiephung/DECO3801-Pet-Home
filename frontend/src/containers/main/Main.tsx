@@ -2,15 +2,14 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Adoption from './screens/Adoption';
-import AdoptionShelter from './screens/Adoption-shelter';
+import Adoption from './screens/adoption';
 import Blog from './screens/Blog';
 import Donation from './screens/Donation';
 import Location from './screens/Location';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Main = () => (
+const Main = ({ navigation }: any) => (
   <Tab.Navigator activeColor="#34e5ff" barStyle={{ backgroundColor: '#ffffff' }} labeled={false}>
     {/* <Tab.Screen
       name="Adoption"
@@ -21,10 +20,11 @@ const Main = () => (
       }}
     /> */}
     <Tab.Screen
-      name="AdoptionShelter"
-      component={AdoptionShelter}
+      name="Adoption"
+      // eslint-disable-next-line react/no-children-prop
+      children={() => <Adoption navigation={navigation} />}
       options={{
-        tabBarLabel: 'AdoptionShelter',
+        tabBarLabel: 'Adoption',
         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
       }}
     />

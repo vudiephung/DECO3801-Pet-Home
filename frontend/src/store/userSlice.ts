@@ -4,7 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
 import { Pet } from '../models/pet';
-import { AppState, fromPets } from '.';
+import { AppState } from '.';
+import { setAuthToken } from '../services/config';
 
 interface UserState {
   user: User | null;
@@ -48,7 +49,8 @@ export const doSignin = createAsyncThunk(
   ) => {
     try {
       const user = await AuthService.signin(credential.userInfo);
-      storeData(tokenKey, user.token);
+      await storeData(tokenKey, user.token);
+      setAuthToken(user.token);
       return user;
     } catch (e) {
       return rejectWithValue(e);
@@ -157,5 +159,12 @@ export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
   (userState) => userState.didLogin,
 );
+
+export const selectIsShelter = createSelector(
+  selectAuthFeature,
+  (userState) => userState.user?.isShelter,
+);
+
+export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
 
 export default userSlice.reducer;

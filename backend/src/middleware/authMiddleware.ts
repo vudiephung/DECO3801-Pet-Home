@@ -1,19 +1,20 @@
 import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs/promises';
+
 import secret from '../jwtSecret';
 
-const verifyAccess = (req: any, res: any, next: any) => {
-  const { token } = req.body;
-
-  const clearUploads = async (files: any) => {
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        await fs.unlink(files[i].path);
-      }
+const clearUploads = async (files: any) => {
+  if (files) {
+    for (let i = 0; i < files.length; i++) {
+      await fs.unlink(files[i].path);
     }
-  };
+  }
+};
+const verifyAccess = (req: any, res: any, next: any) => {
+  const auth = req.header('Authorization').split(' ');
 
-  if (token) {
+  if (auth.length === 2 && /^Bearer$/i.test(auth[0])) {
+    const token = auth[1];
     jwt.verify(token, secret, (err: any, decodedToken: any) => {
       if (err) {
         clearUploads(req.files);

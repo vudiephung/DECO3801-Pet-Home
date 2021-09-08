@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 
-import Button from '../../../components/Button';
-import theme from '../../../core/theme';
+import Button from '../../../../components/Button';
+import theme from '../../../../core/theme';
 
 const data = [
   {
     id: '0',
-    picture: require('../../../assets/cat.jpg'),
+    picture: require('../../../../assets/cat.jpg'),
     breed: 'Maine Coon',
     name: 'Professor Sherlock Meowington',
     description:
@@ -16,7 +16,7 @@ const data = [
   },
   {
     id: '1',
-    picture: require('../../../assets/dog.jpg'),
+    picture: require('../../../../assets/dog.jpg'),
     breed: 'Border Collie',
     name: 'Penelope Petunia Peachtree',
     description:
@@ -96,7 +96,7 @@ const CardItem = ({ item, onPress, visible }: any) => (
   </Card>
 );
 
-const Adoption = () => {
+const AdoptionUser = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
@@ -137,4 +137,4 @@ const Adoption = () => {
   );
 };
 
-export default Adoption;
+export default AdoptionUser;
