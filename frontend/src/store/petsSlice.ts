@@ -26,19 +26,23 @@ export const createInitialState = (): PetsState =>
     selectedId: null,
   });
 
+// eslint-disable-next-line consistent-return
 export const doGetPets = createAsyncThunk('/getPets', async () => {
   try {
-    // TODO
+    const res = await PetsService.userGetAllPets();
+    return res;
   } catch (e) {
-    // TODO
+    console.log(`Cannot get pets with error ${e}`);
   }
 });
 
+// eslint-disable-next-line consistent-return
 export const doGetOwnedPets = createAsyncThunk('/getOwnedPets', async () => {
   try {
-    // TODO
+    const res = await PetsService.shelterGetOwnedPets();
+    return res;
   } catch (e) {
-    // TODO
+    console.log(`Cannot get owned pets with error ${e}`);
   }
 });
 
@@ -86,14 +90,14 @@ const petsSlice = createSlice({
     });
     builder.addCase(doGetPets.fulfilled, (state, action) => {
       state.loading = false;
-      // PetsAdapter.setAll(state, action.payload)
+      PetsAdapter.setAll(state, action.payload);
     });
     builder.addCase(doGetOwnedPets.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(doGetOwnedPets.fulfilled, (state, action) => {
       state.loading = false;
-      // PetsAdapter.setAll(state, action.payload)
+      PetsAdapter.setAll(state, action.payload);
     });
     builder.addCase(doAddPet.pending, (state) => {
       state.loading = true;

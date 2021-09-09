@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 
+import { fromPets, useAppDispatch } from '../../../../store';
 import Button from '../../../../components/Button';
 import theme from '../../../../core/theme';
 
@@ -100,9 +101,18 @@ const AdoptionUser = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
+    (async () => {
+      try {
+        await dispatch(fromPets.doGetPets());
+      } catch (e) {
+        console.log(e);
+      }
+    })();
     setRefreshing(false);
-  });
+  }, []);
 
   const handleRefresh = () => {
     setRefreshing(true);

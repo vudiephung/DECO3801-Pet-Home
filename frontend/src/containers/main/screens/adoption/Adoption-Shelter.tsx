@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import Table from './PetTableInfo';
 import Button from '../../../../components/Button';
 import theme from '../../../../core/theme';
-import { fromPets } from '../../../../store';
+import { fromPets, useAppDispatch } from '../../../../store';
 
 const data = [
   {
@@ -176,10 +176,18 @@ const AdoptionShelter = ({ navigation }: any) => {
   // Test allPets selector, still need GET APIs for further integration and testing
   const pets = useSelector(fromPets.selectAllPets);
   console.log(pets);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
+    (async () => {
+      try {
+        await dispatch(fromPets.doGetOwnedPets());
+      } catch (e) {
+        console.log(e);
+      }
+    })();
     setRefreshing(false);
-  });
+  }, []);
 
   const handleRefresh = () => {
     setRefreshing(true);
