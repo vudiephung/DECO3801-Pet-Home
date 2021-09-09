@@ -50,11 +50,9 @@ router.get('/filtered-pets/:type', verifyAccess, async(req, res, next) => {
 router.get('/user-favorite-pets', verifyAccess, async(req, res, next) => {
   try {
     const user = await User.findById((req as any).userId).exec();
-    const favPets = [];
-    for (let i = 0; i < user.favoritePets.length; i++) {
-      let pet = await Pet.findById(user.favoritePets[i]).exec();
-      favPets.push(pet);
-    }
+    let favPets = await Pet.find(
+      {'_id' : {$in : user.favoritePets}}
+    );
     res.status(200).json(favPets);
   } catch (err) {
     console.log(err);
@@ -95,13 +93,11 @@ router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res, next)
 router.get('/shelter-owned-pets', verifyAccess, async(req, res, next) => {
   try {
     const shelterUser = await User.findById((req as any).userId).exec();
-    const ownedPets = [];
-    for (let i = 0; i < shelterUser.ownedPets.length; i++) {
-      let pet = await Pet.findById(shelterUser.ownedPets[i]).exec();
-      ownedPets.push(pet);
-    }
-    res.status(200).json(ownedPets);
-    console.log(ownedPets);
+    let resultPet = await Pet.find(
+      {'_id': { $in : shelterUser.ownedPets}}
+    );
+
+    res.status(200).json(resultPet);
 
   } catch (err) {
     console.log(err);
