@@ -10,7 +10,7 @@ export interface User {
   isShelter: boolean;
   adress?: string;
   contactNumber?: string;
-  favouritePets?: Pet['petId'][];
+  favouritePets?: Pet['_id'][];
   // posts?: Post[];
   // likedPosts?: Post[];
 }

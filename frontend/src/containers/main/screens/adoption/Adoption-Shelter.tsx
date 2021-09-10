@@ -19,26 +19,26 @@ const data = [
     description:
       'The Maine Coon is a heavily boned, muscular cat. Originally she was an outdoor cat, and later became a working breed who kept barns and homes clear of rodents. The head is large with tall ears. The profile shows a slight dip under the large eyes. The chest is broad, and the legs are thick. The coat of the Maine Coon is heavy but silky. An interesting characteristic is that the coat is shaggy and drapes longer on the stomach and behind the legs (britches) but is shorter over the shoulders.',
   },
-  // {
-  //   id: '1',
-  //   likes: 20,
-  //   age: 2,
-  //   picture: require('../../../../assets/dog.jpg'),
-  //   breed: 'Border Collie',
-  //   name: 'Penelope Petunia Peachtree',
-  //   description:
-  //     'Border Collies are frighteningly smart, active workaholics who must have a job that can be as simple as chasing a tennis ball or as demanding as training for something like herding, agility obedience, or freestyle. What the job is doesnt matter so much as that the Border has a job. The Border is an excellent watchdog and will alert you to the arrival of the letter carrier, a burglar, or a squirrel. Some can become nuisance barkers.',
-  // },
-  // {
-  //   id: '2',
-  //   likes: 15,
-  //   age: 3,
-  //   picture: require('../../../../assets/dog.jpg'),
-  //   breed: 'Border Collie',
-  //   name: 'Penelope Petunia Peachtree',
-  //   description:
-  //     'Border Collies are frighteningly smart, active workaholics who must have a job that can be as simple as chasing a tennis ball or as demanding as training for something like herding, agility obedience, or freestyle. What the job is doesnt matter so much as that the Border has a job. The Border is an excellent watchdog and will alert you to the arrival of the letter carrier, a burglar, or a squirrel. Some can become nuisance barkers.',
-  // },
+  {
+    id: '1',
+    likes: 20,
+    age: 2,
+    picture: require('../../../../assets/dog.jpg'),
+    breed: 'Border Collie',
+    name: 'Penelope Petunia Peachtree',
+    description:
+      'Border Collies are frighteningly smart, active workaholics who must have a job that can be as simple as chasing a tennis ball or as demanding as training for something like herding, agility obedience, or freestyle. What the job is doesnt matter so much as that the Border has a job. The Border is an excellent watchdog and will alert you to the arrival of the letter carrier, a burglar, or a squirrel. Some can become nuisance barkers.',
+  },
+  {
+    id: '2',
+    likes: 15,
+    age: 3,
+    picture: require('../../../../assets/dog.jpg'),
+    breed: 'Border Collie',
+    name: 'Penelope Petunia Peachtree',
+    description:
+      'Border Collies are frighteningly smart, active workaholics who must have a job that can be as simple as chasing a tennis ball or as demanding as training for something like herding, agility obedience, or freestyle. What the job is doesnt matter so much as that the Border has a job. The Border is an excellent watchdog and will alert you to the arrival of the letter carrier, a burglar, or a squirrel. Some can become nuisance barkers.',
+  },
 ];
 
 const styles = StyleSheet.create({

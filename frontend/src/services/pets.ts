@@ -25,15 +25,15 @@ export const addPet = async (
   return res.data;
 };
 
-export const deletePet = async (petId: Pet['petId']) => {
+export const deletePet = async (petId: Pet['_id']) => {
   return (await instance.delete(`/shelter-delete-pet/${petId}`)).data;
 };
 
-export const addFavoritePet = async (petId: Pet['petId']) => {
+export const addFavoritePet = async (petId: Pet['_id']) => {
   return (await instance.post(`/user-add-favorite/${petId}`)).data;
 };
 
-export const deleteFavoritePet = async (petId: Pet['petId']) => {
+export const deleteFavoritePet = async (petId: Pet['_id']) => {
   return (await instance.post(`/user-delete-favorite/${petId}`)).data;
 };
 

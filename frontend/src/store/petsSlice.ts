@@ -13,11 +13,11 @@ import { PetsService } from '../services';
 export const PETS_FEATURE_KEY = 'pets';
 
 const PetsAdapter = createEntityAdapter<Pet>({
-  selectId: (pet) => pet.petId,
+  selectId: (pet) => pet._id,
 });
 interface PetsState extends EntityState<Pet> {
   loading: boolean;
-  selectedId: Pet['petId'] | null;
+  selectedId: Pet['_id'] | null;
 }
 
 export const createInitialState = (): PetsState =>
@@ -57,11 +57,12 @@ export const doAddPet = createAsyncThunk(
   ) => {
     try {
       const res = await PetsService.addPet(pet.petInfo, pet.images);
-      return {
+      const newPet = {
         ...pet.petInfo,
         images: res.images,
-        petId: res.petId,
+        _id: res.petId,
       };
+      return newPet;
     } catch (e) {
       return rejectWithValue(e);
     }

@@ -76,7 +76,7 @@ export const doSignout = createAsyncThunk('auth/signout', () => {
 
 export const doAddFavoritePet = createAsyncThunk(
   '/addFavoritePet',
-  async (petId: Pet['petId'], { rejectWithValue }) => {
+  async (petId: Pet['_id'], { rejectWithValue }) => {
     try {
       await PetsService.addFavoritePet(petId);
       return petId;
@@ -88,7 +88,7 @@ export const doAddFavoritePet = createAsyncThunk(
 
 export const doDeleteFavoritePet = createAsyncThunk(
   '/deleteFavoritePet',
-  async (petId: Pet['petId'], { rejectWithValue }) => {
+  async (petId: Pet['_id'], { rejectWithValue }) => {
     try {
       await PetsService.deleteFavoritePet(petId);
       return petId;
