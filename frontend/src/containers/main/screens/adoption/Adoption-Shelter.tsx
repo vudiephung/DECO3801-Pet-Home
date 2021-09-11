@@ -3,10 +3,10 @@ import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Card, Paragraph } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 
-import Table from './PetTableInfo';
 import Button from '../../../../components/Button';
 import theme from '../../../../core/theme';
 import { fromPets, useAppDispatch } from '../../../../store';
+import PetTable from './PetTableInfo';
 
 const data = [
   {
@@ -141,9 +141,9 @@ const CardItem = ({ item, onPress, visible }: any) => {
           <Paragraph style={styles.breed}>{item.breed}</Paragraph>
           <Paragraph style={styles.name}>{item.name}</Paragraph>
         </View>
-        {visible && (
+        {!!visible && (
           <View>
-            <Table />
+            <PetTable />
             <Paragraph style={styles.description}>{item.description}</Paragraph>
             <View style={styles.cardButtons}>
               <Button
@@ -200,8 +200,8 @@ const AdoptionShelter = ({ navigation }: any) => {
       <CardItem
         item={item}
         onPress={() => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          !selectedId ? setSelectedId(item.id) : setSelectedId(null);
+          if (!selectedId) setSelectedId(item.id);
+          else setSelectedId(null);
         }}
         visible={visible}
       />

@@ -72,7 +72,7 @@ const CardItem = ({ item, onPress, visible }: any) => (
         <Paragraph style={styles.breed}>{item.breed}</Paragraph>
         <Paragraph style={styles.name}>{item.name}</Paragraph>
       </View>
-      {visible && (
+      {!!visible && (
         <View>
           <Paragraph style={styles.description}>{item.description}</Paragraph>
           <Button
@@ -125,8 +125,8 @@ const AdoptionUser = () => {
       <CardItem
         item={item}
         onPress={() => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          !selectedId ? setSelectedId(item.id) : setSelectedId(null);
+          if (!selectedId) setSelectedId(item.id);
+          else setSelectedId(null);
         }}
         visible={visible}
       />
