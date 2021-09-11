@@ -95,7 +95,6 @@ router.get('/shelter-owned-pets', verifyAccess, async (req, res, next) => {
       ownedPets.push(pet);
     }
     res.status(200).json(ownedPets);
-    console.log(ownedPets);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Something went wrong' });

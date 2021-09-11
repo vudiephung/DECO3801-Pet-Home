@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, DataTable, Paragraph } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import { SliderBox } from 'react-native-image-slider-box';
 
 import Button from '../../../../components/Button';
 import theme from '../../../../core/theme';
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
 
 const CardItem = ({ item, onPress, visible }: any) => {
   const dispatch = useAppDispatch();
+  const [selectedImage, setSelectedImage] = useState<number>(0);
   const token = useSelector(fromUser.selectToken);
   const tableRows = [createData('Type', item.type), createData('Age', item.age)];
   const isShelter = useSelector(fromUser.selectIsShelter);
@@ -116,16 +118,30 @@ const CardItem = ({ item, onPress, visible }: any) => {
     );
   };
 
+  const images = item.images.map((image: string) => {
+    return {
+      uri: `${baseURL}/image/${image}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+  });
+
+  const handleOnPress = (index: number) => {
+    setSelectedImage(index);
+    onPress();
+  };
+
   return (
     <Card style={styles.card} onPress={onPress}>
-      <Card.Cover
-        source={{
-          uri: `${baseURL}/image/${item.images[0]}`,
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }}
-      />
+      {visible ? (
+        <SliderBox
+          onCurrentImagePressed={(index: number) => handleOnPress(index)}
+          images={images}
+        />
+      ) : (
+        <Card.Cover source={images[selectedImage]} />
+      )}
       <Card.Content>
         <View style={styles.title}>
           <Paragraph style={styles.breed}>{item.breed}</Paragraph>
