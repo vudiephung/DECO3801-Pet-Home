@@ -1,29 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Card, Paragraph } from 'react-native-paper';
+import { Card, DataTable, Paragraph } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 
-import { fromPets, useAppDispatch } from '../../../../store';
 import Button from '../../../../components/Button';
 import theme from '../../../../core/theme';
-
-const data = [
-  {
-    id: '0',
-    picture: require('../../../../assets/cat.jpg'),
-    breed: 'Maine Coon',
-    name: 'Professor Sherlock Meowington',
-    description:
-      'The Maine Coon is a heavily boned, muscular cat. Originally she was an outdoor cat, and later became a working breed who kept barns and homes clear of rodents. The head is large with tall ears. The profile shows a slight dip under the large eyes. The chest is broad, and the legs are thick. The coat of the Maine Coon is heavy but silky. An interesting characteristic is that the coat is shaggy and drapes longer on the stomach and behind the legs (britches) but is shorter over the shoulders.',
-  },
-  {
-    id: '1',
-    picture: require('../../../../assets/dog.jpg'),
-    breed: 'Border Collie',
-    name: 'Penelope Petunia Peachtree',
-    description:
-      'Border Collies are frighteningly smart, active workaholics who must have a job that can be as simple as chasing a tennis ball or as demanding as training for something like herding, agility obedience, or freestyle. What the job is doesnt matter so much as that the Border has a job. The Border is an excellent watchdog and will alert you to the arrival of the letter carrier, a burglar, or a squirrel. Some can become nuisance barkers.',
-  },
-];
+import { baseURL } from '../../../../services/config';
+import { fromPets, fromUser, useAppDispatch } from '../../../../store';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -62,45 +45,71 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     color: 'white',
   },
+  rowCell: {
+    justifyContent: 'center',
+  },
 });
 
-const CardItem = ({ item, onPress, visible }: any) => (
-  <Card style={styles.card} onPress={onPress}>
-    <Card.Cover source={item.picture} />
-    <Card.Content>
-      <View style={styles.title}>
-        <Paragraph style={styles.breed}>{item.breed}</Paragraph>
-        <Paragraph style={styles.name}>{item.name}</Paragraph>
-      </View>
-      {!!visible && (
-        <View>
-          <Paragraph style={styles.description}>{item.description}</Paragraph>
-          <Button
-            style={styles.button}
-            labelStyle={styles.buttonText}
-            onPress={() => {
-              console.log('add to collection');
-            }}>
-            add to collection
-          </Button>
-          <Button
-            style={styles.button}
-            labelStyle={styles.buttonText}
-            onPress={() => {
-              console.log('contact shelter');
-            }}>
-            contact shelter
-          </Button>
+function createData(field: string, value: string) {
+  return { field, value };
+}
+
+const CardItem = ({ item, onPress, visible }: any) => {
+  const token = useSelector(fromUser.selectToken);
+  const tableRows = [createData('Type', item.type), createData('Age', item.age)];
+  return (
+    <Card style={styles.card} onPress={onPress}>
+      <Card.Cover
+        source={{
+          uri: `${baseURL}/image/${item.images[0]}`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }}
+      />
+      <Card.Content>
+        <View style={styles.title}>
+          <Paragraph style={styles.breed}>{item.breed}</Paragraph>
+          <Paragraph style={styles.name}>{item.name}</Paragraph>
         </View>
-      )}
-    </Card.Content>
-  </Card>
-);
+        {!!visible && (
+          <View>
+            <DataTable>
+              {tableRows.map((row) => (
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.rowCell}>{row.field}</DataTable.Cell>
+                  <DataTable.Cell style={styles.rowCell}>{row.value}</DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+            <Paragraph style={styles.description}>{item.description}</Paragraph>
+            <Button
+              style={styles.button}
+              labelStyle={styles.buttonText}
+              onPress={() => {
+                console.log('add to collection');
+              }}>
+              add to collection
+            </Button>
+            <Button
+              style={styles.button}
+              labelStyle={styles.buttonText}
+              onPress={() => {
+                console.log('contact shelter');
+              }}>
+              contact shelter
+            </Button>
+          </View>
+        )}
+      </Card.Content>
+    </Card>
+  );
+};
 
 const AdoptionUser = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-
+  const pets: any[] = useSelector(fromPets.selectAllPets);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -120,12 +129,12 @@ const AdoptionUser = () => {
   };
 
   const renderItem = ({ item }: any) => {
-    const visible = item.id === selectedId;
+    const visible = item._id === selectedId;
     return (
       <CardItem
         item={item}
         onPress={() => {
-          if (!selectedId) setSelectedId(item.id);
+          if (!selectedId) setSelectedId(item._id);
           else setSelectedId(null);
         }}
         visible={visible}
@@ -136,9 +145,9 @@ const AdoptionUser = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={data}
+        data={pets}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         extraData={selectedId}
         refreshing={refreshing}
         onRefresh={handleRefresh}
