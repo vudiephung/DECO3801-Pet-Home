@@ -1,4 +1,5 @@
 import * as AuthService from './auth';
+import * as PetsService from './pets';
 
-// eslint-disable-next-line import/prefer-default-export
 export { AuthService };
+export { PetsService };

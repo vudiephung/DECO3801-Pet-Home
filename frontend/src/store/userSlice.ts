@@ -1,18 +1,17 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Axios, { AxiosResponse } from 'axios';
-import { AuthService } from '../services';
+
+import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
+import { Pet } from '../models/pet';
 import { AppState } from '.';
+import { setAuthToken } from '../services/config';
 
 interface UserState {
-  userId: string | null;
-  username: string | null;
+  user: User | null;
   loading: boolean;
   didLogin: boolean;
-  token: string | null;
-  errors: any[];
+  // errors: any[];
 }
 
 export const USER_FEATURE_KEY = 'user';
@@ -36,12 +35,10 @@ const deleteData = async (key: string) => {
 };
 
 export const createInitialState = (): UserState => ({
-  userId: null,
-  username: null,
-  token: null,
+  user: null,
   loading: false,
   didLogin: false,
-  errors: [],
+  // errors: [],
 });
 
 export const doSignin = createAsyncThunk(
@@ -52,7 +49,8 @@ export const doSignin = createAsyncThunk(
   ) => {
     try {
       const user = await AuthService.signin(credential.userInfo);
-      storeData(tokenKey, user.token);
+      await storeData(tokenKey, user.token);
+      setAuthToken(user.token);
       return user;
     } catch (e) {
       return rejectWithValue(e);
@@ -76,7 +74,31 @@ export const doSignout = createAsyncThunk('auth/signout', () => {
   deleteData(tokenKey);
 });
 
-const usersSlice = createSlice({
+export const doAddFavoritePet = createAsyncThunk(
+  '/addFavoritePet',
+  async (petId: Pet['_id'], { rejectWithValue }) => {
+    try {
+      await PetsService.addFavoritePet(petId);
+      return petId;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
+export const doDeleteFavoritePet = createAsyncThunk(
+  '/deleteFavoritePet',
+  async (petId: Pet['_id'], { rejectWithValue }) => {
+    try {
+      await PetsService.deleteFavoritePet(petId);
+      return petId;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
+const userSlice = createSlice({
   name: USER_FEATURE_KEY,
   initialState: createInitialState(),
   reducers: {},
@@ -85,19 +107,15 @@ const usersSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doSignin.fulfilled, (state, action) => {
+      state.user = action.payload;
       state.didLogin = true;
-      state.token = action.payload.token;
-      state.userId = action.payload.userId;
-      state.username = action.payload.username;
       state.loading = false;
     });
-    builder.addCase(doSignin.rejected, (state, action) => {
-      const { payload } = action;
-      state.userId = null;
-      state.token = null;
+    builder.addCase(doSignin.rejected, (state) => {
+      state.user = null;
       state.loading = false;
       deleteData(tokenKey);
-      state.errors.push(payload);
+      // state.errors.push(payload);
     });
     builder.addCase(doSignup.pending, (state) => {
       state.loading = true;
@@ -105,18 +123,32 @@ const usersSlice = createSlice({
     builder.addCase(doSignup.fulfilled, (state) => {
       state.loading = false;
     });
-    builder.addCase(doSignup.rejected, (state, action) => {
-      const { payload } = action;
+    builder.addCase(doSignup.rejected, (state) => {
       state.loading = false;
-      state.errors.push(payload);
+      // state.errors.push(payload);
     });
     builder.addCase(doSignout.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(doSignout.fulfilled, (state) => {
-      state.userId = null;
-      state.token = null;
+      state.didLogin = true;
+      state.user = null;
       state.loading = false;
+    });
+    builder.addCase(doAddFavoritePet.fulfilled, (state, action) => {
+      if (state.user && !state.user.favouritePets) {
+        state.user.favouritePets = [action.payload];
+      } else if (state.user && state.user.favouritePets) {
+        state.user.favouritePets.push(action.payload);
+      }
+    });
+    builder.addCase(doDeleteFavoritePet.fulfilled, (state, action) => {
+      if (state.user && state.user.favouritePets) {
+        const index = state.user.favouritePets.indexOf(action.payload);
+        if (index > -1) {
+          state.user.favouritePets.splice(index, 1);
+        }
+      }
     });
   },
 });
@@ -128,4 +160,11 @@ export const selectIsAuthenticated = createSelector(
   (userState) => userState.didLogin,
 );
 
-export default usersSlice.reducer;
+export const selectIsShelter = createSelector(
+  selectAuthFeature,
+  (userState) => userState.user?.isShelter,
+);
+
+export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
+
+export default userSlice.reducer;

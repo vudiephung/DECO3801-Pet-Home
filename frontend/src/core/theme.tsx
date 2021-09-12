@@ -8,6 +8,7 @@ const theme = {
     primary: '#917681',
     secondary: '#414757',
     error: '#f13a59',
+    button: '#caff8a',
   },
 };
 

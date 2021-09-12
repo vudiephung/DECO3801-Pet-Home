@@ -1,5 +1,6 @@
 import React, { memo, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSelector } from 'react-redux';
 
 import Background from '../../components/Background';
 import Logo from '../../components/Logo';
@@ -7,10 +8,7 @@ import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import theme from '../../core/theme';
-
-import { fromUsers, useAppDispatch } from '../../store';
-import store from '../../store';
-import { useSelector } from 'react-redux';
+import { fromUser, useAppDispatch } from '../../store';
 
 interface SignInFormInputs {
   email: string;
@@ -39,11 +37,11 @@ const styles = StyleSheet.create({
 const SignIn = ({ navigation }: any) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const isAuthenticated = useSelector(fromUsers.selectIsAuthenticated);
+  const isAuthenticated = useSelector(fromUser.selectIsAuthenticated);
   const dispatch = useAppDispatch();
 
   const handleSignIn = async ({ email, password }: SignInFormInputs) => {
-    await dispatch(fromUsers.doSignin({ userInfo: { email, password } }));
+    await dispatch(fromUser.doSignin({ userInfo: { email, password } }));
   };
 
   if (isAuthenticated) {

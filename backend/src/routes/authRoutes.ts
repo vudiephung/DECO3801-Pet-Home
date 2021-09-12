@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import * as jwt from 'jsonwebtoken';
-import User, { hashPassword } from '../models/User';
 import bcrytp from 'bcrypt';
+
+import User, { hashPassword } from '../models/User';
 import secret from '../jwtSecret';
 
 const router = Router();
@@ -35,11 +36,11 @@ router.post('/shelter-signup', async (req, res, next) => {
     const token = createToken(user._id);
     res.status(201).json({
       userId: user._id,
-      username: username,
+      username,
       isShelter: user.isShelter,
       address: user.address,
       contactNumber: user.contactNumber,
-      token: token,
+      token,
     });
   } catch (err) {
     if ((err as any).code === 11000) {
@@ -64,9 +65,9 @@ router.post('/signup', async (req, res) => {
     const token = createToken(user._id);
     res.status(201).json({
       userId: user._id,
-      username: username,
+      username,
       isShelter: user.isShelter,
-      token: token,
+      token,
     });
   } catch (err) {
     // Email duplication
@@ -91,16 +92,15 @@ router.post('/signin', async (req, res) => {
           isShelter: true,
           address: user.address,
           contactNumber: user.contactNumber,
-          token: token,
-        });
-      } else {
-        return res.status(200).json({
-          userId: user._id,
-          username: user.username,
-          isShelter: false,
-          token: token,
+          token,
         });
       }
+      return res.status(200).json({
+        userId: user._id,
+        username: user.username,
+        isShelter: false,
+        token,
+      });
     }
   }
   return res.status(400).json({ error: 'Incorrect email or password' });

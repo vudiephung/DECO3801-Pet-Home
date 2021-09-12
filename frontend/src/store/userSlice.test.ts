@@ -19,7 +19,7 @@ describe('userSlice', () => {
 
   beforeEach(() => {
     store = mockStore({
-      ['auth']: createInitialState(),
+      auth: createInitialState(),
     });
   });
 
