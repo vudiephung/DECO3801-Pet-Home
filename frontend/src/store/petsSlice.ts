@@ -46,6 +46,19 @@ export const doGetOwnedPets = createAsyncThunk('/getOwnedPets', async () => {
   }
 });
 
+export const doGetFilteredPets = createAsyncThunk(
+  '/getFilteredPets',
+  // eslint-disable-next-line consistent-return
+  async (petType: Parameters<typeof PetsService['getFilterPets']>[0]) => {
+    try {
+      const res = await PetsService.getFilterPets(petType);
+      return res;
+    } catch (e) {
+      console.log(`Cannot get filtered pets with error ${e}`);
+    }
+  },
+);
+
 export const doAddPet = createAsyncThunk(
   '/addPet',
   async (
@@ -97,6 +110,13 @@ const petsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doGetOwnedPets.fulfilled, (state, action) => {
+      state.loading = false;
+      PetsAdapter.setAll(state, action.payload);
+    });
+    builder.addCase(doGetFilteredPets.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(doGetFilteredPets.fulfilled, (state, action) => {
       state.loading = false;
       PetsAdapter.setAll(state, action.payload);
     });

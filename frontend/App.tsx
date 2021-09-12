@@ -23,7 +23,7 @@ const App = () => {
           <Stack.Navigator initialRouteName="SignIn" screenOptions={{ header: CustomAppbar }}>
             <Stack.Screen name="SignIn" component={SignIn} options={{ headerShown: false }} />
             <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-            <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+            <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="AddPet" component={AddPet} options={{ headerShown: false }} />
             <Stack.Screen
               name="PickImages"

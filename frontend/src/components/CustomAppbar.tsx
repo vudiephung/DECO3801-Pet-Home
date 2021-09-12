@@ -5,6 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import Chip from './Chip';
 import theme from '../core/theme';
+import { fromPets, useAppDispatch } from '../store';
 
 const styles = StyleSheet.create({
   column: { flexDirection: 'column', justifyContent: 'center', padding: 8 },
@@ -17,13 +18,35 @@ const styles = StyleSheet.create({
 });
 
 const CustomAppbar = () => {
+  const dispatch = useAppDispatch();
   const [visible, setVisible] = useState(false);
   const [selectedDog, setSelectedDog] = useState(false);
   const [selectedCat, setSelectedCat] = useState(false);
-  const [selectedKitten, setSelectedKitten] = useState(false);
-  const [selectedPuppy, setSelectedPuppy] = useState(false);
+  const [selectedHamster, setSelectedHamster] = useState(false);
   const [selectedMale, setSelectedMale] = useState(false);
   const [selectedFemale, setSelectedFemale] = useState(false);
+
+  const handlePressDog = () => {
+    if (selectedDog) {
+      dispatch(fromPets.doGetPets());
+    } else {
+      dispatch(fromPets.doGetFilteredPets('dog'));
+    }
+    setSelectedDog(!selectedDog);
+    setSelectedCat(false);
+    setSelectedHamster(false);
+  };
+
+  const handlePressCat = () => {
+    if (selectedCat) {
+      dispatch(fromPets.doGetPets());
+    } else {
+      dispatch(fromPets.doGetFilteredPets('cat'));
+    }
+    setSelectedCat(!selectedCat);
+    setSelectedDog(false);
+    setSelectedHamster(false);
+  };
 
   return (
     <Appbar.Header style={{ height: visible ? 'auto' : 55, flexDirection: 'column' }}>
@@ -44,44 +67,24 @@ const CustomAppbar = () => {
             <Chip
               style={{ backgroundColor: selectedDog ? '#34e5ff' : theme.colors.surface }}
               selected={selectedDog}
-              onPress={() => {
-                setSelectedDog(!selectedDog);
-                setSelectedCat(false);
-                setSelectedKitten(false);
-              }}>
+              onPress={handlePressDog}>
               Dog
             </Chip>
             <Chip
               style={{ backgroundColor: selectedCat ? '#34e5ff' : theme.colors.surface }}
               selected={selectedCat}
-              onPress={() => {
-                setSelectedCat(!selectedCat);
-                setSelectedDog(false);
-                setSelectedPuppy(false);
-              }}>
+              onPress={handlePressCat}>
               Cat
             </Chip>
             <Chip
-              style={{ backgroundColor: selectedKitten ? '#34e5ff' : theme.colors.surface }}
-              selected={selectedKitten}
+              style={{ backgroundColor: selectedHamster ? '#34e5ff' : theme.colors.surface }}
+              selected={selectedHamster}
               onPress={() => {
-                setSelectedKitten(!selectedKitten);
-                setSelectedCat(true);
-                setSelectedDog(false);
-                setSelectedPuppy(false);
-              }}>
-              Kitten
-            </Chip>
-            <Chip
-              style={{ backgroundColor: selectedPuppy ? '#34e5ff' : theme.colors.surface }}
-              selected={selectedPuppy}
-              onPress={() => {
-                setSelectedPuppy(!selectedPuppy);
-                setSelectedDog(true);
+                setSelectedHamster(!selectedHamster);
                 setSelectedCat(false);
-                setSelectedKitten(false);
+                setSelectedDog(false);
               }}>
-              Puppy
+              Hamster
             </Chip>
           </View>
           <View style={styles.row}>

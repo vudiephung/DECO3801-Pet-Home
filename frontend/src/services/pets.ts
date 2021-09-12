@@ -40,3 +40,6 @@ export const deleteFavoritePet = async (petId: Pet['_id']) => {
 export const userGetAllPets = async () => (await instance.get('/all-pets')).data;
 
 export const shelterGetOwnedPets = async () => (await instance.get('/shelter-owned-pets')).data;
+
+export const getFilterPets = async (petType: Pet['type']) =>
+  (await instance.get(`/filtered-pets/${petType}`)).data;

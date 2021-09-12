@@ -35,12 +35,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: theme.fonts.regular.fontFamily,
     fontSize: 16,
+    fontWeight: 'bold',
   },
   breed: {
     flex: 1,
     textAlign: 'center',
     fontFamily: theme.fonts.regular.fontFamily,
-    fontWeight: 'bold',
     fontSize: 16,
   },
   description: {
@@ -144,8 +144,8 @@ const CardItem = ({ item, onPress, visible }: any) => {
       )}
       <Card.Content>
         <View style={styles.title}>
-          <Paragraph style={styles.breed}>{item.breed}</Paragraph>
           <Paragraph style={styles.name}>{item.name}</Paragraph>
+          <Paragraph style={styles.breed}>{item.breed}</Paragraph>
         </View>
         {!!visible && (
           <View>
