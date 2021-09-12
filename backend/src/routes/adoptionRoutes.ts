@@ -10,14 +10,14 @@ import * as S3 from '../utilities/s3';
 const router = Router();
 const upload = multer({ dest: './pet-image-uploads/' });
 
-router.get('/image/:key', verifyAccess, (req, res, next) => {
+router.get('/image/:key', verifyAccess, (req, res) => {
   const imageKey = req.params.key;
   const imageStream = S3.fetchImage(imageKey);
   imageStream.pipe(res);
 });
 
 // retrieve all available pets data for every users
-router.get('/all-pets', verifyAccess, async (req, res, next) => {
+router.get('/all-pets', verifyAccess, async (req, res) => {
   try {
     const pet = await Pet.find().exec();
     res.status(200).json(pet);
@@ -28,14 +28,14 @@ router.get('/all-pets', verifyAccess, async (req, res, next) => {
 });
 
 // retrieve pets data based on types dogs/cats
-router.get('/filtered-pets/:type', verifyAccess, async (req, res, next) => {
+router.get('/filtered-pets/:type', verifyAccess, async (req, res) => {
   try {
     const checkType = req.params.type;
-    if (checkType == 'dog') {
+    if (checkType === 'dog') {
       const dogPet = await Pet.find({ type: 'dog' }).exec();
       res.status(200).json(dogPet);
     }
-    if (checkType == 'cat') {
+    if (checkType === 'cat') {
       const catPet = await Pet.find({ type: 'cat' }).exec();
       res.status(200).json(catPet);
     }
@@ -46,17 +46,18 @@ router.get('/filtered-pets/:type', verifyAccess, async (req, res, next) => {
 });
 
 // retrieve every user'favorite pets
-router.get('/user-favorite-pets', verifyAccess, async (req, res, next) => {
+router.get('/user-favorite-pets', verifyAccess, async (req, res) => {
   try {
     const user = await User.findById((req as any).userId).exec();
-    res.status(200).json(user.favoritePets);
+    const favPets = await Pet.find({ _id: { $in: user.favoritePets } });
+    res.status(200).json(favPets);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
 
-router.post('/user-add-favorite/:petId', verifyAccess, async (req, res, next) => {
+router.post('/user-add-favorite/:petId', verifyAccess, async (req, res) => {
   const { petId } = req.params;
   try {
     const user = await User.findById((req as any).userId).exec();
@@ -69,7 +70,7 @@ router.post('/user-add-favorite/:petId', verifyAccess, async (req, res, next) =>
   }
 });
 
-router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res, next) => {
+router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res) => {
   const { petId } = req.params;
   try {
     const user = await User.findById((req as any).userId).exec();
@@ -86,22 +87,19 @@ router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res, next)
 // ============================= Routes for Shelter user =============================
 
 // retrieve petIds owned by a single Shelter
-router.get('/shelter-owned-pets', verifyAccess, async (req, res, next) => {
+router.get('/shelter-owned-pets', verifyAccess, async (req, res) => {
   try {
     const shelterUser = await User.findById((req as any).userId).exec();
-    const ownedPets = [];
-    for (let i = 0; i < shelterUser.ownedPets.length; i++) {
-      const pet = await Pet.findById(shelterUser.ownedPets[i]).exec();
-      ownedPets.push(pet);
-    }
-    res.status(200).json(ownedPets);
+    const resultPet = await Pet.find({ _id: { $in: shelterUser.ownedPets } });
+
+    res.status(200).json(resultPet);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
 
-router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res, next) => {
+router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res) => {
   const { petId } = req.params;
   try {
     // Find shelter user doc and remove petId from ownedPets
@@ -123,7 +121,7 @@ router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res, next)
   }
 });
 
-router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (req, res, next) => {
+router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (req, res) => {
   try {
     // Upload the image(s) to S3 then delete local image(s)
     const imageKeys: string[] = [];
@@ -155,7 +153,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
   }
 });
 
-router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, async (req, res, next) => {
+router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, async (req, res) => {
   const { petId } = req.params;
   const { name, type, breed, age, description, imagesToDelete } = req.body;
   try {
@@ -191,7 +189,7 @@ router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, a
   }
 });
 
-router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res, next) => {
+router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res) => {
   const { petId } = req.params;
   try {
     // Find shelter user doc and remove petId from ownedPets
