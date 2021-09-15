@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const SignIn = ({ navigation }: any) => {
+const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const isAuthenticated = useSelector(fromUser.selectIsAuthenticated);
@@ -44,9 +44,11 @@ const SignIn = ({ navigation }: any) => {
     await dispatch(fromUser.doSignin({ userInfo: { email, password } }));
   };
 
-  if (isAuthenticated) {
-    navigation.navigate('Main');
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.navigate('Main');
+    }
+  }, [isAuthenticated]);
 
   return (
     <Background>
