@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 const AdoptionShelter = ({ navigation }: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const pets: any[] = useSelector(fromPets.selectAllPets);
+  const pets = useSelector(fromPets.selectAllPets);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

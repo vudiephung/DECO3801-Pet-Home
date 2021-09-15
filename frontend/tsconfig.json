@@ -9,8 +9,9 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "noImplicitAny": false
   },
   "exclude": ["node_modules", "babel.config.js", "metro.config.js"],
-  "extends": "expo/tsconfig.base.json"
+  "extends": "expo/tsconfig.base"
 }
