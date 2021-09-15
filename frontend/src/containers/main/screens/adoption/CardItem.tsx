@@ -72,14 +72,34 @@ const styles = StyleSheet.create({
   rowCell: {
     justifyContent: 'center',
   },
+  deleteFavButton: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: theme.colors.error,
+    width: '55%',
+  },
+  addFavButton: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: theme.colors.primary,
+    width: '55%',
+  },
+  disabledButton: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#cccccc',
+    width: '55%',
+    color: '#666666',
+  },
 });
 
-const CardItem = ({ item, onPress, visible, navigation }: any) => {
+const CardItem = ({ item, onPress, visible, navigation, isFavPetScreen }: any) => {
   const dispatch = useAppDispatch();
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const token = useSelector(fromUser.selectToken);
   const tableRows = [createData('Type', item.type), createData('Age', item.age)];
   const isShelter = useSelector(fromUser.selectIsShelter);
+  const favPetIds = useSelector(fromUser.selectFavPetIds);
 
   const handleDelete = () => {
     dispatch(fromPets.doDeletePet(item._id));
@@ -89,7 +109,34 @@ const CardItem = ({ item, onPress, visible, navigation }: any) => {
     dispatch(fromUser.doAddFavoritePet(item._id));
   };
 
-  const renderButtons = () => {
+  const handleDeleteFavPet = () => {
+    dispatch(fromUser.doDeleteFavoritePet(item._id));
+  };
+
+  const renderButtons = (itemId: string) => {
+    if (isFavPetScreen) {
+      return (
+        <Button
+          style={styles.deleteFavButton}
+          labelStyle={styles.buttonText}
+          onPress={handleDeleteFavPet}>
+          Delete from Favorite
+        </Button>
+      );
+    }
+
+    if (favPetIds && favPetIds.includes(itemId)) {
+      return (
+        <Button
+          disabled
+          style={styles.disabledButton}
+          labelStyle={styles.buttonText}
+          onPress={handleAddFavoritePet}>
+          Added to Favorite
+        </Button>
+      );
+    }
+
     if (isShelter) {
       return (
         <View style={styles.cardButtons}>
@@ -108,14 +155,12 @@ const CardItem = ({ item, onPress, visible, navigation }: any) => {
       );
     }
     return (
-      <View style={styles.cardButtons}>
-        <Button
-          style={styles.editButton}
-          labelStyle={styles.buttonText}
-          onPress={handleAddFavoritePet}>
-          Add to Favorite
-        </Button>
-      </View>
+      <Button
+        style={styles.addFavButton}
+        labelStyle={styles.buttonText}
+        onPress={handleAddFavoritePet}>
+        Add to Favorite
+      </Button>
     );
   };
 
@@ -164,7 +209,7 @@ const CardItem = ({ item, onPress, visible, navigation }: any) => {
                 {paragraph}
               </Paragraph>
             ))}
-            {renderButtons()}
+            {renderButtons(item._id)}
           </View>
         )}
       </Card.Content>

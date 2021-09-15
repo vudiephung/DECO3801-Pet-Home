@@ -143,18 +143,24 @@ const selectAuthFeature = (state: AppState) => state[fromUser.USER_FEATURE_KEY];
 export const { selectAll: selectAllPets, selectEntities } =
   PetsAdapter.getSelectors(selectPetsFeature);
 
-export const selectSelectedId = () =>
-  createSelector(selectPetsFeature, (petsState) => petsState.selectedId);
+export const selectSelectedId = createSelector(
+  selectPetsFeature,
+  (petsState) => petsState.selectedId,
+);
 
-export const selectSelectedPet = () =>
-  createSelector(selectPetsFeature, selectEntities, (petsState, entities) =>
-    petsState.selectedId ? entities[petsState.selectedId] : null,
-  );
+export const selectSelectedPet = createSelector(
+  selectPetsFeature,
+  selectEntities,
+  (petsState, entities) => (petsState.selectedId ? entities[petsState.selectedId] : null),
+);
 
 export const selectFavouritePets = createSelector(
   selectAuthFeature,
   selectEntities,
   (userState, petEntities) => {
+    if (!userState.user?.favouritePets) {
+      return [];
+    }
     return userState.user?.favouritePets?.map((i) => petEntities[i]);
   },
 );

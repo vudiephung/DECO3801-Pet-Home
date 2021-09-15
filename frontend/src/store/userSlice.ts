@@ -165,6 +165,11 @@ export const selectIsShelter = createSelector(
   (userState) => userState.user?.isShelter,
 );
 
+export const selectFavPetIds = createSelector(
+  selectAuthFeature,
+  (userState) => userState.user?.favouritePets,
+);
+
 export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
 
 export default userSlice.reducer;
