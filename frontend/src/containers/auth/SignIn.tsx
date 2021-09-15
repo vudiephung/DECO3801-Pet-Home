@@ -45,7 +45,7 @@ const SignIn = ({ navigation }: any) => {
   };
 
   if (isAuthenticated) {
-    navigation.navigate('Main');
+    navigation.navigate('MainDrawerNavigator');
   }
 
   return (

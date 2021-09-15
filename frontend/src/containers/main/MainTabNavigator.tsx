@@ -9,20 +9,11 @@ import Location from './screens/Location';
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Main = ({ navigation }: any) => (
+const MainTabNavigator = ({ navigation }: any) => (
   <Tab.Navigator activeColor="#34e5ff" barStyle={{ backgroundColor: '#ffffff' }} labeled={false}>
-    {/* <Tab.Screen
-      name="Adoption"
-      component={Adoption}
-      options={{
-        tabBarLabel: 'Adoption',
-        tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
-      }}
-    /> */}
     <Tab.Screen
       name="Adoption"
-      // eslint-disable-next-line react/no-children-prop
-      children={() => <Adoption navigation={navigation} />}
+      component={Adoption}
       options={{
         tabBarLabel: 'Adoption',
         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
@@ -59,4 +50,4 @@ const Main = ({ navigation }: any) => (
   </Tab.Navigator>
 );
 
-export default Main;
+export default MainTabNavigator;

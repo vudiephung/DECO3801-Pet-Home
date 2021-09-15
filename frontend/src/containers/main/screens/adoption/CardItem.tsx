@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, DataTable, Paragraph } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+// @ts-ignore
 import { SliderBox } from 'react-native-image-slider-box';
 
 import Button from '../../../../components/Button';
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CardItem = ({ item, onPress, visible }: any) => {
+const CardItem = ({ item, onPress, visible, navigation }: any) => {
   const dispatch = useAppDispatch();
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const token = useSelector(fromUser.selectToken);
@@ -96,7 +97,7 @@ const CardItem = ({ item, onPress, visible }: any) => {
             style={styles.editButton}
             labelStyle={styles.buttonText}
             onPress={() => {
-              console.log('edit');
+              navigation.navigate('EditPet', { pet: item });
             }}>
             Edit
           </Button>

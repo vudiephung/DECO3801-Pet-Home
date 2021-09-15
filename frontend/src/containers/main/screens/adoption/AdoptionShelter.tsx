@@ -54,6 +54,7 @@ const AdoptionShelter = ({ navigation }: any) => {
           else setSelectedId(null);
         }}
         visible={visible}
+        navigation={navigation}
       />
     );
   };
