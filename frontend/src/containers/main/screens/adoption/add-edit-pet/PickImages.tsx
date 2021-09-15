@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react';
-import { SafeAreaView, StyleSheet, View, Image, ScrollView, Text } from 'react-native';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
+import { SafeAreaView, StyleSheet, View, Image, ScrollView, Text, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AssetsSelector } from 'expo-images-picker';
 import { MediaType } from 'expo-media-library';
 import { useSelector } from 'react-redux';
 import { baseURL } from '../../../../../services/config';
 import Constants from 'expo-constants';
+import Toast from 'react-native-root-toast';
 
 import theme from '../../../../../core/theme';
 import { fromPets, fromUser, useAppDispatch } from '../../../../../store';
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     width: '100%',
-    fontSize: 20,
+    fontSize: 15,
     paddingVertical: 3,
     color: 'white',
     fontWeight: 'bold',
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
 const ImageItem = ({ imageId, iconOnPress }: any) => {
   const token = useSelector(fromUser.selectToken);
   return (
-    <View style={styles.chosenImageContainer} key={imageId}>
+    <View style={styles.chosenImageContainer}>
       <Image
         resizeMode="cover"
         style={styles.chosenImage}
@@ -72,14 +73,35 @@ const PickImages = ({ route, navigation }: any) => {
   const dispatch = useAppDispatch();
   const { petData, mode, currentImages } = route.params;
 
-  const [uploadedList, setUploadedList] = useState<string[]>([...currentImages]);
+  const [uploadedList, setUploadedList] = currentImages
+    ? useState<string[]>([...currentImages])
+    : useState<string[]>([]);
+  const deletedImageIds = useRef<string[]>([]);
 
   const onSuccess = async (data: any) => {
-    const images = data.map((element: any) => {
-      return { uri: element.uri, name: element.filename };
-    });
-    await dispatch(fromPets.doAddPet({ petInfo: petData, images }));
-    navigation.navigate('AdoptionShelter');
+    showAlert(
+      'Are you sure you want to submit?',
+      mode == 'ADD'
+        ? 'This pet will be uploaded as a new pet'
+        : 'This pet will be updated with the new information provided',
+      async () => {
+        const images = data.map((element: any) => {
+          return { uri: element.uri, name: element.filename };
+        });
+        if (mode == 'ADD') {
+          await dispatch(fromPets.doAddPet({ petInfo: petData, images }));
+        } else {
+          await dispatch(
+            fromPets.doEditPet({
+              petInfo: petData,
+              imagesToDelete: deletedImageIds.current,
+              newImages: images,
+            }),
+          );
+        }
+        navigation.navigate('AdoptionShelter');
+      },
+    );
   };
 
   const widgetErrors = useMemo(
@@ -161,21 +183,67 @@ const PickImages = ({ route, navigation }: any) => {
     [],
   );
 
-  const handleDeleteUploadedImage = (imageId: string) => {
-    const updatedList = uploadedList.filter((id) => id != imageId);
-    setUploadedList(updatedList);
+  const showToastMessage = (message: string) => {
+    Toast.show(message, {
+      position: Toast.positions.BOTTOM,
+      duration: 7000,
+      hideOnPress: true,
+      animation: true,
+      shadow: true,
+      delay: 0,
+    });
   };
+
+  const showAlert = (title: string, message: string, confirmHandler: () => void) => {
+    Alert.alert(title, message, [
+      {
+        text: 'No',
+        style: 'cancel',
+        onPress: () => {},
+      },
+      {
+        text: 'Yes',
+        onPress: () => confirmHandler(),
+      },
+    ]);
+  };
+
+  const handleDeleteUploadedImage = (imageId: string) => {
+    showAlert('Are you sure you want to delete this image?', 'This can not be undone', () => {
+      deletedImageIds.current.push(imageId);
+      const updatedList = uploadedList.filter((id) => id != imageId);
+      if (updatedList.length == 0) {
+        widgetNavigator.minSelection = 1;
+        widgetSettings.minSelection = 1;
+      }
+      widgetNavigator.maxSelection = 3 - updatedList.length;
+      widgetSettings.maxSelection = 3 - updatedList.length;
+      setUploadedList(updatedList);
+    });
+  };
+
+  useEffect(() => {
+    if (mode == 'ADD') {
+      showToastMessage('The maximum number of images you can choose is 3');
+    } else {
+      showToastMessage('The maximum number of uploaded and newly chosen images combined is 3');
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
+      {mode == 'EDIT' && <Text style={styles.sectionTitle}>Uploaded Images</Text>}
       {mode == 'EDIT' && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={styles.sectionTitle}>Uploaded Images</Text>
-          <ScrollView>
-            {uploadedList.map((imageId: string) => (
-              <ImageItem imageId={imageId} iconOnPress={handleDeleteUploadedImage} />
-            ))}
-          </ScrollView>
+          {uploadedList.length > 0 ? (
+            <ScrollView>
+              {uploadedList.map((imageId: string, index: number) => (
+                <ImageItem key={index} imageId={imageId} iconOnPress={handleDeleteUploadedImage} />
+              ))}
+            </ScrollView>
+          ) : (
+            <Text>All uploaded images have been deleted</Text>
+          )}
         </View>
       )}
       <View style={{ flex: 1 }}>

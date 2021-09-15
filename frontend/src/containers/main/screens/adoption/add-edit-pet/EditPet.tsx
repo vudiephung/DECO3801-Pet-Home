@@ -89,7 +89,7 @@ const EditPet = ({ route, navigation }: any) => {
         />
         <TouchableOpacity
           onPress={() => {
-            const petData = { name, type, breed, age, description };
+            const petData = { _id: pet._id, name, type, breed, age, description };
             navigation.navigate('PickImages', { petData, mode: 'EDIT', currentImages: pet.images });
           }}>
           <Text style={styles.add}>Choose Images</Text>

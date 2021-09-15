@@ -82,6 +82,29 @@ export const doAddPet = createAsyncThunk(
   },
 );
 
+export const doEditPet = createAsyncThunk(
+  '/editPet',
+  async (
+    pet: {
+      petInfo: Parameters<typeof PetsService['editPet']>[0];
+      imagesToDelete: Parameters<typeof PetsService['editPet']>[1];
+      newImages: Parameters<typeof PetsService['editPet']>[2];
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const res = await PetsService.editPet(pet.petInfo, pet.imagesToDelete, pet.newImages);
+      const newPet = {
+        ...pet.petInfo,
+        images: res.images,
+      };
+      return newPet;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
 export const doDeletePet = createAsyncThunk(
   '/deletePet',
   async (petId: Parameters<typeof PetsService['deletePet']>[0], { rejectWithValue }) => {
@@ -126,6 +149,13 @@ const petsSlice = createSlice({
     builder.addCase(doAddPet.fulfilled, (state, action) => {
       state.loading = false;
       PetsAdapter.addOne(state, action.payload);
+    });
+    builder.addCase(doEditPet.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(doEditPet.fulfilled, (state, action) => {
+      state.loading = false;
+      PetsAdapter.setOne(state, action.payload);
     });
     builder.addCase(doDeletePet.pending, (state) => {
       state.loading = true;
