@@ -170,6 +170,8 @@ export const selectFavPetIds = createSelector(
   (userState) => userState.user?.favouritePets,
 );
 
+export const selectUser = createSelector(selectAuthFeature, (userState) => userState.user);
+
 export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
 
 export default userSlice.reducer;

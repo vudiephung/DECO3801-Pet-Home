@@ -195,4 +195,6 @@ export const selectFavouritePets = createSelector(
   },
 );
 
+export const selectLoading = createSelector(selectPetsFeature, (petState) => petState.loading);
+
 export default petsSlice.reducer;

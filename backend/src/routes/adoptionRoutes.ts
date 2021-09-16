@@ -106,14 +106,14 @@ router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res) => {
     const shelterUser = await User.findById((req as any).userId).exec();
     const petIndex = shelterUser.ownedPets.indexOf(petId);
     shelterUser.ownedPets.splice(petIndex, 1);
-    await shelterUser.save();
+    shelterUser.save(); // await
     // Find pet doc and delete its images from remote S3 bucket
     const pet = await Pet.findById(petId).exec();
     for (let i = 0; i < pet.images.length; i++) {
-      await S3.deleteImage(pet.images[i]);
+      S3.deleteImage(pet.images[i]); // await
     }
     // Delete the pet doc from db
-    await Pet.findByIdAndDelete(petId).exec();
+    Pet.findByIdAndDelete(petId).exec(); // await
     res.status(200).json({ success: 'Pet successfully deleted' });
   } catch (err) {
     console.log(err);
@@ -129,7 +129,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
       for (let i = 0; i < req.files.length; i++) {
         const { Key } = await S3.uploadImage((req.files as Express.Multer.File[])[i]);
         imageKeys.push(Key);
-        await fs.unlink((req.files as Express.Multer.File[])[i].path);
+        fs.unlink((req.files as Express.Multer.File[])[i].path); // await
       }
     }
     // Create the new Pet document
@@ -145,7 +145,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
     // Add Pet's ID to list in shelter User document
     const shelterUser = await User.findById((req as any).userId).exec();
     shelterUser.ownedPets.push(pet._id);
-    await shelterUser.save();
+    shelterUser.save(); // await
     res.status(201).json({ petId: pet._id, images: (pet as any).images });
   } catch (err) {
     console.log(err);
@@ -169,7 +169,7 @@ router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, a
       for (let i = 0; i < imagesToDelete.length; i++) {
         const imageIndex = pet.images.indexOf(imagesToDelete[i]);
         pet.images.splice(imageIndex, 1);
-        await S3.deleteImage(imagesToDelete[i]);
+        S3.deleteImage(imagesToDelete[i]); // await
       }
     }
     // Store newly uploaded images to S3, add their keys to the pet doc then delete from local storage
@@ -177,34 +177,12 @@ router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, a
       for (let i = 0; i < req.files.length; i++) {
         const { Key } = await S3.uploadImage((req.files as Express.Multer.File[])[i]);
         pet.images.push(Key);
-        await fs.unlink((req.files as Express.Multer.File[])[i].path);
+        fs.unlink((req.files as Express.Multer.File[])[i].path); // await
       }
     }
     // Save the updated pet doc to db and respond it back
     await pet.save();
     res.status(200).json(pet);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
-  }
-});
-
-router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res) => {
-  const { petId } = req.params;
-  try {
-    // Find shelter user doc and remove petId from ownedPets
-    const shelterUser = await User.findById((req as any).userId).exec();
-    const petIndex = shelterUser.ownedPets.indexOf(petId);
-    shelterUser.ownedPets.splice(petIndex, 1);
-    await shelterUser.save();
-    // Find pet doc and delete its images from remote S3 bucket
-    const pet = await Pet.findById(petId).exec();
-    for (let i = 0; i < pet.images.length; i++) {
-      await S3.deleteImage(pet.images[i]);
-    }
-    // Delete the pet doc from db
-    await Pet.findByIdAndDelete(petId).exec();
-    res.status(200).json({ success: 'Pet successfully deleted' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Something went wrong' });

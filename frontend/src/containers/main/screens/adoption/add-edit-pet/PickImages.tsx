@@ -197,13 +197,13 @@ const PickImages = ({ route, navigation }: any) => {
   const showAlert = (title: string, message: string, confirmHandler: () => void) => {
     Alert.alert(title, message, [
       {
+        text: 'Yes',
+        onPress: () => confirmHandler(),
+      },
+      {
         text: 'No',
         style: 'cancel',
         onPress: () => {},
-      },
-      {
-        text: 'Yes',
-        onPress: () => confirmHandler(),
       },
     ]);
   };

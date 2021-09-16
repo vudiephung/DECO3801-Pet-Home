@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import { Card, DataTable, Paragraph } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 // @ts-ignore
@@ -102,7 +102,17 @@ const CardItem = ({ item, onPress, visible, navigation, isFavPetScreen }: any) =
   const favPetIds = useSelector(fromUser.selectFavPetIds);
 
   const handleDelete = () => {
-    dispatch(fromPets.doDeletePet(item._id));
+    Alert.alert('Are you sure you want to delete this pet?', 'This action can not be undone', [
+      {
+        text: 'Yes',
+        onPress: async () => dispatch(fromPets.doDeletePet(item._id)),
+      },
+      {
+        text: 'No',
+        style: 'cancel',
+        onPress: () => {},
+      },
+    ]);
   };
 
   const handleAddFavoritePet = () => {

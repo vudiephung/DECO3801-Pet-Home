@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import Button from '../../../../components/Button';
 import theme from '../../../../core/theme';
@@ -26,6 +27,7 @@ const AdoptionShelter = ({ navigation }: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const pets = useSelector(fromPets.selectAllPets);
+  const petLoading = useSelector(fromPets.selectLoading);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -65,6 +67,12 @@ const AdoptionShelter = ({ navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Spinner
+        visible={petLoading}
+        textContent="Loading..."
+        animation="fade"
+        textStyle={{ color: 'white' }}
+      />
       <Button style={styles.addButton} labelStyle={styles.addButtonText} onPress={handleAddPet}>
         +
       </Button>
