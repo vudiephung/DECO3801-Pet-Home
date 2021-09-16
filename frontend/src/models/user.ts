@@ -8,7 +8,7 @@ export interface User {
   token: string;
   username: string;
   isShelter: boolean;
-  adress?: string;
+  address?: string;
   contactNumber?: string;
   favouritePets?: Pet['_id'][];
   // posts?: Post[];

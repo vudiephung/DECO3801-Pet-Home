@@ -46,7 +46,7 @@ const SignIn = ({ navigation }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigation.navigate('Main');
+      navigation.navigate('MainDrawerNavigator');
     }
   }, [isAuthenticated]);
 

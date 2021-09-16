@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/core';
+import { DrawerActions } from '@react-navigation/routers';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Chip from './Chip';
@@ -25,6 +27,7 @@ const CustomAppbar = () => {
   const [selectedHamster, setSelectedHamster] = useState(false);
   const [selectedMale, setSelectedMale] = useState(false);
   const [selectedFemale, setSelectedFemale] = useState(false);
+  const navigation = useNavigation();
 
   const handlePressDog = () => {
     if (selectedDog) {
@@ -53,7 +56,9 @@ const CustomAppbar = () => {
       <View style={{ flexDirection: 'row' }}>
         <Appbar.Action
           icon={() => <MaterialCommunityIcons name="menu" color="white" size={26} />}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.dispatch(DrawerActions.toggleDrawer());
+          }}
         />
         <Appbar.Content title="" />
         <Appbar.Action

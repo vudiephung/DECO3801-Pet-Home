@@ -82,6 +82,29 @@ export const doAddPet = createAsyncThunk(
   },
 );
 
+export const doEditPet = createAsyncThunk(
+  '/editPet',
+  async (
+    pet: {
+      petInfo: Parameters<typeof PetsService['editPet']>[0];
+      imagesToDelete: Parameters<typeof PetsService['editPet']>[1];
+      newImages: Parameters<typeof PetsService['editPet']>[2];
+    },
+    { rejectWithValue },
+  ) => {
+    try {
+      const res = await PetsService.editPet(pet.petInfo, pet.imagesToDelete, pet.newImages);
+      const newPet = {
+        ...pet.petInfo,
+        images: res.images,
+      };
+      return newPet;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
 export const doDeletePet = createAsyncThunk(
   '/deletePet',
   async (petId: Parameters<typeof PetsService['deletePet']>[0], { rejectWithValue }) => {
@@ -127,6 +150,13 @@ const petsSlice = createSlice({
       state.loading = false;
       PetsAdapter.addOne(state, action.payload);
     });
+    builder.addCase(doEditPet.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(doEditPet.fulfilled, (state, action) => {
+      state.loading = false;
+      PetsAdapter.setOne(state, action.payload);
+    });
     builder.addCase(doDeletePet.pending, (state) => {
       state.loading = true;
     });
@@ -143,20 +173,28 @@ const selectAuthFeature = (state: AppState) => state[fromUser.USER_FEATURE_KEY];
 export const { selectAll: selectAllPets, selectEntities } =
   PetsAdapter.getSelectors(selectPetsFeature);
 
-export const selectSelectedId = () =>
-  createSelector(selectPetsFeature, (petsState) => petsState.selectedId);
+export const selectSelectedId = createSelector(
+  selectPetsFeature,
+  (petsState) => petsState.selectedId,
+);
 
-export const selectSelectedPet = () =>
-  createSelector(selectPetsFeature, selectEntities, (petsState, entities) =>
-    petsState.selectedId ? entities[petsState.selectedId] : null,
-  );
+export const selectSelectedPet = createSelector(
+  selectPetsFeature,
+  selectEntities,
+  (petsState, entities) => (petsState.selectedId ? entities[petsState.selectedId] : null),
+);
 
 export const selectFavouritePets = createSelector(
   selectAuthFeature,
   selectEntities,
   (userState, petEntities) => {
+    if (!userState.user?.favouritePets) {
+      return [];
+    }
     return userState.user?.favouritePets?.map((i) => petEntities[i]);
   },
 );
+
+export const selectLoading = createSelector(selectPetsFeature, (petState) => petState.loading);
 
 export default petsSlice.reducer;
