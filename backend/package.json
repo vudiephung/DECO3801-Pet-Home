@@ -4,10 +4,10 @@
   "description": "The Back-end of Pet Home",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
     "build": "tsc -p .",
-    "clean": "rm -rf middleware models routes utilities app.js jwtSecret.js"
+    "clean": "rm -rf dist/*"
   },
   "author": "Team Resilience",
   "license": "ISC",
