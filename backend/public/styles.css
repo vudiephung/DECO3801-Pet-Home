@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&display=swap');
+
+html {
+  height: 100%;
+}
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background-color: lightblue;
+  margin: 0 auto;
+  max-width: 800px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+nav {
+  display: flex;
+  background-color: blanchedalmond;
+  border-radius: 15px;
+  justify-content: center;
+  flex: 0 1 auto;
+}
+nav h1 {
+  color: chocolate;
+  font-size: 40px;
+  padding: 10px;
+  margin: 0;
+}
+
+#signup-form {
+  flex: 1 1 auto;
+}
+.form-item label {
+  display: block;
+  margin: 10px 0 3px 0;
+  font-size: 15px;
+}
+#signup-form h2 {
+  text-align: center;
+  margin-bottom: 0;
+  color: chocolate;
+}
+#signup-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#signup-form input {
+  min-width: 300px;
+  height: 30px;
+  background-color: cornsilk;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+button {
+  margin-top: 30px;
+  height: 40px;
+  width: 150px;
+  color: aliceblue;
+  background-color: chocolate;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  font-weight: bold;
+}
+button:hover {
+  background-color: brown;
+}
+
+.footer {
+  flex: 0 1 auto;
+  margin-bottom: 20px;
+  text-align: center;
+}
