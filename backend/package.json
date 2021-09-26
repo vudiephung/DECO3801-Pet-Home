@@ -11,6 +11,7 @@
   "author": "Team Resilience",
   "license": "ISC",
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.2.2",
     "aws-sdk": "^2.980.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
