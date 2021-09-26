@@ -8,6 +8,8 @@ import locationRouter from './routes/locationRoutes';
 
 const app = express();
 
+app.set('trust proxy', 'loopback'); // Setup to run on UQ cloud zone
+
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
@@ -28,7 +30,8 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => {
-    app.listen(5000, () => {
+    // Port 8081 to run on UQ cloud zone
+    app.listen(8081, () => {
       console.log('Server is running.');
     });
   });
