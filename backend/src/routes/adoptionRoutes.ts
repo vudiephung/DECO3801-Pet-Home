@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as fs from 'fs/promises';
+import { promises as fs } from 'fs';
 import multer from 'multer';
 
 import User from '../models/User';
