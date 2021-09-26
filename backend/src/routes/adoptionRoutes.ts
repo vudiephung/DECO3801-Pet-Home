@@ -23,7 +23,7 @@ router.get('/all-pets', verifyAccess, async (req, res) => {
     res.status(200).json(pet);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -41,7 +41,7 @@ router.get('/filtered-pets/:type', verifyAccess, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -53,7 +53,7 @@ router.get('/user-favorite-pets', verifyAccess, async (req, res) => {
     res.status(200).json(favPets);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -66,7 +66,7 @@ router.post('/user-add-favorite/:petId', verifyAccess, async (req, res) => {
     res.status(200).json({ success: "Added pet to user's favorite" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -80,7 +80,7 @@ router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res) => {
     res.status(200).json({ success: "Removed pet from user's favorite" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -95,7 +95,7 @@ router.get('/shelter-owned-pets', verifyAccess, async (req, res) => {
     res.status(200).json(resultPet);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -117,7 +117,7 @@ router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res) => {
     res.status(200).json({ success: 'Pet successfully deleted' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -149,7 +149,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
     res.status(201).json({ petId: pet._id, images: (pet as any).images });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -185,7 +185,7 @@ router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, a
     res.status(200).json(pet);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
