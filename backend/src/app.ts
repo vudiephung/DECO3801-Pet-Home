@@ -7,6 +7,8 @@ import adoptionRouter from './routes/adoptionRoutes';
 
 const app = express();
 
+app.set('trust proxy', 'loopback'); // Setup to run on UQ cloud zone
+
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
@@ -21,13 +23,14 @@ app.use((req, res, next) => {
 });
 
 mongoose
-  .connect('mongodb://127.0.0.1:27017/dev3801', {
+  .connect('mongodb://127.0.0.1:27017/pet-home-production', {
     useCreateIndex: true,
     useUnifiedTopology: true,
     useNewUrlParser: true,
   })
   .then(() => {
-    app.listen(5000, () => {
+    // Port 8081 to run on UQ cloud zone
+    app.listen(8081, () => {
       console.log('Server is running.');
     });
   });
