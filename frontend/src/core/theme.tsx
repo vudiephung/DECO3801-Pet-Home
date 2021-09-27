@@ -5,10 +5,11 @@ const theme = {
   roundness: 50,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#917681',
-    secondary: '#414757',
-    error: '#f13a59',
-    button: '#caff8a',
+    primary: '#e8d297',
+    secondary: '#cfb15d',
+    error: '#e24536',
+    button: '#e8d297',
+    active: '#97e8e1',
   },
 };
 

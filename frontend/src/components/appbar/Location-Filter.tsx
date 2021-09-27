@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 
+import theme from '../../core/theme';
+
 const styles = StyleSheet.create({
   column: { flexDirection: 'column', justifyContent: 'center' },
   row: {
@@ -28,6 +30,7 @@ const LocationFilter = () => {
           step={10}
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
+          thumbTintColor={theme.colors.active}
           onValueChange={(value) => setDistance(value)}
         />
       </View>
@@ -42,6 +45,7 @@ const LocationFilter = () => {
           step={10}
           minimumTrackTintColor="#FFFFFF"
           maximumTrackTintColor="#000000"
+          thumbTintColor={theme.colors.active}
           onValueChange={(value) => setTop(value)}
         />
       </View>

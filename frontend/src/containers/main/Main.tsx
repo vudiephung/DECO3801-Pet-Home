@@ -8,13 +8,17 @@ import Blog from './screens/Blog';
 import Donation from './screens/Donation';
 import Location from './screens/location';
 import Zone from './screens/location/Zone';
+import theme from '../../core/theme';
 
 const LocationStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 
 const Main = ({ navigation }: any) => (
-  <Tab.Navigator activeColor="#34e5ff" barStyle={{ backgroundColor: '#ffffff' }} labeled={false}>
+  <Tab.Navigator
+    activeColor={theme.colors.active}
+    barStyle={{ backgroundColor: '#ffffff' }}
+    labeled={false}>
     {/* <Tab.Screen
       name="Adoption"
       component={Adoption}

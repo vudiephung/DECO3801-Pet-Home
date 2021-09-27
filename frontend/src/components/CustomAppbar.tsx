@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
 
 import Chip from './Chip';
 import theme from '../core/theme';
-import { fromPets, fromUser, useAppDispatch } from '../store';
+import { fromPets, useAppDispatch } from '../store';
 
 const styles = StyleSheet.create({
   column: { flexDirection: 'column', justifyContent: 'center', padding: 8 },
@@ -26,7 +25,6 @@ const CustomAppbar = () => {
   const [selectedHamster, setSelectedHamster] = useState(false);
   const [selectedMale, setSelectedMale] = useState(false);
   const [selectedFemale, setSelectedFemale] = useState(false);
-  const currentTab = useSelector(fromUser.selectCurrentTab);
 
   const handlePressDog = () => {
     if (selectedDog) {
@@ -67,19 +65,21 @@ const CustomAppbar = () => {
         <View style={styles.column}>
           <View style={styles.row}>
             <Chip
-              style={{ backgroundColor: selectedDog ? '#34e5ff' : theme.colors.surface }}
+              style={{ backgroundColor: selectedDog ? theme.colors.active : theme.colors.surface }}
               selected={selectedDog}
               onPress={handlePressDog}>
               Dog
             </Chip>
             <Chip
-              style={{ backgroundColor: selectedCat ? '#34e5ff' : theme.colors.surface }}
+              style={{ backgroundColor: selectedCat ? theme.colors.active : theme.colors.surface }}
               selected={selectedCat}
               onPress={handlePressCat}>
               Cat
             </Chip>
             <Chip
-              style={{ backgroundColor: selectedHamster ? '#34e5ff' : theme.colors.surface }}
+              style={{
+                backgroundColor: selectedHamster ? theme.colors.active : theme.colors.surface,
+              }}
               selected={selectedHamster}
               onPress={() => {
                 setSelectedHamster(!selectedHamster);
@@ -91,7 +91,7 @@ const CustomAppbar = () => {
           </View>
           <View style={styles.row}>
             <Chip
-              style={{ backgroundColor: selectedMale ? '#34e5ff' : theme.colors.surface }}
+              style={{ backgroundColor: selectedMale ? theme.colors.active : theme.colors.surface }}
               selected={selectedMale}
               onPress={() => {
                 setSelectedMale(!selectedMale);
@@ -100,7 +100,9 @@ const CustomAppbar = () => {
               Male
             </Chip>
             <Chip
-              style={{ backgroundColor: selectedFemale ? '#34e5ff' : theme.colors.surface }}
+              style={{
+                backgroundColor: selectedFemale ? theme.colors.active : theme.colors.surface,
+              }}
               selected={selectedFemale}
               onPress={() => {
                 setSelectedFemale(!selectedFemale);
