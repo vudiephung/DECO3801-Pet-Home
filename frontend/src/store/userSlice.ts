@@ -11,6 +11,7 @@ interface UserState {
   user: User | null;
   loading: boolean;
   didLogin: boolean;
+  currentTab: string;
   // errors: any[];
 }
 
@@ -38,6 +39,7 @@ export const createInitialState = (): UserState => ({
   user: null,
   loading: false,
   didLogin: false,
+  currentTab: 'adoption',
   // errors: [],
 });
 
@@ -101,7 +103,11 @@ export const doDeleteFavoritePet = createAsyncThunk(
 const userSlice = createSlice({
   name: USER_FEATURE_KEY,
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doChangeCurrentTab(state, action) {
+      state.currentTab = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(doSignin.pending, (state) => {
       state.loading = true;
@@ -165,6 +171,12 @@ export const selectIsShelter = createSelector(
   (userState) => userState.user?.isShelter,
 );
 
+export const selectCurrentTab = createSelector(
+  selectAuthFeature,
+  (userState) => userState.currentTab,
+);
+
 export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
+export const { doChangeCurrentTab } = userSlice.actions;
 
 export default userSlice.reducer;

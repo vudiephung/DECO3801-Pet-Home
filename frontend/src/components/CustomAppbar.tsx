@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSelector } from 'react-redux';
 
 import Chip from './Chip';
 import theme from '../core/theme';
-import { fromPets, useAppDispatch } from '../store';
+import { fromPets, fromUser, useAppDispatch } from '../store';
 
 const styles = StyleSheet.create({
   column: { flexDirection: 'column', justifyContent: 'center', padding: 8 },
@@ -25,6 +26,7 @@ const CustomAppbar = () => {
   const [selectedHamster, setSelectedHamster] = useState(false);
   const [selectedMale, setSelectedMale] = useState(false);
   const [selectedFemale, setSelectedFemale] = useState(false);
+  const currentTab = useSelector(fromUser.selectCurrentTab);
 
   const handlePressDog = () => {
     if (selectedDog) {

@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Provider } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
 
-import CustomAppbar from './src/components/CustomAppbar';
+import CustomAppbar from './src/components/appbar';
 import SignIn from './src/containers/auth/SignIn';
 import SignUp from './src/containers/auth/SignUp';
 import Main from './src/containers/main/Main';

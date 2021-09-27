@@ -1,11 +1,15 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Adoption from './screens/adoption';
 import Blog from './screens/Blog';
 import Donation from './screens/Donation';
-import Location from './screens/Location';
+import Location from './screens/location';
+import Zone from './screens/location/Zone';
+
+const LocationStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -20,7 +24,7 @@ const Main = ({ navigation }: any) => (
       }}
     /> */}
     <Tab.Screen
-      name="Adoption"
+      name="AdoptionTab"
       // eslint-disable-next-line react/no-children-prop
       children={() => <Adoption navigation={navigation} />}
       options={{
@@ -29,8 +33,18 @@ const Main = ({ navigation }: any) => (
       }}
     />
     <Tab.Screen
-      name="Location"
-      component={Location}
+      name="LocationTab"
+      // eslint-disable-next-line react/no-children-prop
+      children={() => (
+        <LocationStack.Navigator initialRouteName="SignIn">
+          <LocationStack.Screen
+            name="Location"
+            component={Location}
+            options={{ headerShown: false }}
+          />
+          <LocationStack.Screen name="Zone" component={Zone} options={{ headerShown: false }} />
+        </LocationStack.Navigator>
+      )}
       options={{
         tabBarLabel: 'Location',
         tabBarIcon: ({ color }) => (
