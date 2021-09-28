@@ -88,6 +88,7 @@ router.post('/signin', async (req, res) => {
       if (user.isShelter) {
         return res.status(200).json({
           userId: user._id,
+          email: user.email,
           username: user.username,
           isShelter: true,
           address: user.address,
@@ -97,6 +98,7 @@ router.post('/signin', async (req, res) => {
       }
       return res.status(200).json({
         userId: user._id,
+        email: user.email,
         username: user.username,
         isShelter: false,
         token,

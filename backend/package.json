@@ -4,13 +4,15 @@
   "description": "The Back-end of Pet Home",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts",
-    "build": "tsc -p ."
+    "start": "node dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "build": "tsc -p .",
+    "clean": "rm -rf dist/*"
   },
   "author": "Team Resilience",
   "license": "ISC",
   "dependencies": {
+    "@googlemaps/google-maps-services-js": "^3.2.2",
     "aws-sdk": "^2.980.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",

@@ -1,30 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import CardItem from './CardItem';
-import { fromPets, useAppDispatch } from '../../../../store';
+import theme from '../../../core/theme';
+import { fromPets } from '../../../store';
+import CardItem from './adoption/CardItem';
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-});
-
-const AdoptionUser = () => {
+const FavoritePets = ({ navigation }: any) => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const pets: any[] = useSelector(fromPets.selectAllPets);
-  const dispatch = useAppDispatch();
+  const pets = useSelector(fromPets.selectFavouritePets);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        await dispatch(fromPets.doGetPets());
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-    setRefreshing(false);
-  }, []);
+  const styles = StyleSheet.create({
+    container: { flex: 1 },
+    addButton: {
+      backgroundColor: theme.colors.primary,
+      width: '30%',
+      alignSelf: 'center',
+    },
+    addButtonText: {
+      fontWeight: 'bold',
+      fontSize: 20,
+      lineHeight: 26,
+      color: 'white',
+    },
+  });
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -35,12 +35,14 @@ const AdoptionUser = () => {
     const visible = item._id === selectedId;
     return (
       <CardItem
+        isFavPetScreen
         item={item}
         onPress={() => {
           if (!selectedId) setSelectedId(item._id);
           else setSelectedId(null);
         }}
         visible={visible}
+        navigation={navigation}
       />
     );
   };
@@ -59,4 +61,4 @@ const AdoptionUser = () => {
   );
 };
 
-export default AdoptionUser;
+export default FavoritePets;

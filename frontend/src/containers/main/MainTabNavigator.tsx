@@ -14,23 +14,14 @@ const LocationStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 
-const Main = ({ navigation }: any) => (
+const MainTabNavigator = () => (
   <Tab.Navigator
     activeColor={theme.colors.active}
     barStyle={{ backgroundColor: '#ffffff' }}
     labeled={false}>
-    {/* <Tab.Screen
+    <Tab.Screen
       name="Adoption"
       component={Adoption}
-      options={{
-        tabBarLabel: 'Adoption',
-        tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
-      }}
-    /> */}
-    <Tab.Screen
-      name="AdoptionTab"
-      // eslint-disable-next-line react/no-children-prop
-      children={() => <Adoption navigation={navigation} />}
       options={{
         tabBarLabel: 'Adoption',
         tabBarIcon: ({ color }) => <MaterialCommunityIcons name="home" color={color} size={26} />,
@@ -77,4 +68,4 @@ const Main = ({ navigation }: any) => (
   </Tab.Navigator>
 );
 
-export default Main;
+export default MainTabNavigator;

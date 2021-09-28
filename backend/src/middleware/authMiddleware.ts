@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import * as fs from 'fs/promises';
+import { promises as fs } from 'fs';
 
 import secret from '../jwtSecret';
 

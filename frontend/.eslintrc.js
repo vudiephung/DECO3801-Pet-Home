@@ -26,6 +26,12 @@ module.exports = {
   },
   plugins: ['react', 'react-native', 'react-hooks', 'prettier'],
   rules: {
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'no-underscore-dangle': 'off',
     '@typescript-eslint/no-shadow': 'off',
     'import/no-cycle': 'off',

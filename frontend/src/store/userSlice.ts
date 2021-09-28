@@ -176,6 +176,13 @@ export const selectCurrentTab = createSelector(
   (userState) => userState.currentTab,
 );
 
+export const selectFavPetIds = createSelector(
+  selectAuthFeature,
+  (userState) => userState.user?.favouritePets,
+);
+
+export const selectUser = createSelector(selectAuthFeature, (userState) => userState.user);
+
 export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
 export const { doChangeCurrentTab } = userSlice.actions;
 
