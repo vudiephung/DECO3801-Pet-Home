@@ -4,8 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
 import { Pet } from '../models/pet';
-import { AppState } from '.';
 import { setAuthToken } from '../services/config';
+import { USER_FEATURE_KEY } from './keywords';
 
 interface UserState {
   user: User | null;
@@ -14,8 +14,6 @@ interface UserState {
   currentTab: string;
   // errors: any[];
 }
-
-export const USER_FEATURE_KEY = 'user';
 
 const tokenKey: string = 'token';
 
@@ -163,7 +161,7 @@ const userSlice = createSlice({
   },
 });
 
-const selectAuthFeature = (state: AppState) => state[USER_FEATURE_KEY];
+const selectAuthFeature = (state: any) => state[USER_FEATURE_KEY];
 
 export const selectIsAuthenticated = createSelector(
   selectAuthFeature,

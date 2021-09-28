@@ -17,7 +17,7 @@ const MainDrawerNavigator = ({ navigation }: any) => {
     <Drawer.Navigator initialRouteName="Pet Home" screenOptions={{ headerShown: false }}>
       <Drawer.Screen name="Pet Home" component={MainTabNavigator} />
       <Drawer.Screen name="My Profile" component={UserProfile} />
-      {!isShelter && <Drawer.Screen name="Saved Pets" component={FavoritePets} />}
+      {!isShelter && <Drawer.Screen name="Favorite Pets" component={FavoritePets} />}
       {/* eslint-disable-next-line react/no-children-prop */}
       <Drawer.Screen name="Sign Out" children={() => <SignOut navigation={navigation} />} />
     </Drawer.Navigator>

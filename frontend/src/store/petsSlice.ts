@@ -7,10 +7,8 @@ import {
 } from '@reduxjs/toolkit';
 
 import { Pet } from '../models/pet';
-import { AppState, fromUser } from '.';
 import { PetsService } from '../services';
-
-export const PETS_FEATURE_KEY = 'pets';
+import { PETS_FEATURE_KEY, USER_FEATURE_KEY } from './keywords';
 
 const PetsAdapter = createEntityAdapter<Pet>({
   selectId: (pet) => pet._id,
@@ -167,8 +165,8 @@ const petsSlice = createSlice({
   },
 });
 
-const selectPetsFeature = (state: AppState) => state[PETS_FEATURE_KEY];
-const selectAuthFeature = (state: AppState) => state[fromUser.USER_FEATURE_KEY];
+const selectPetsFeature = (state: any) => state[PETS_FEATURE_KEY];
+const selectAuthFeature = (state: any) => state[USER_FEATURE_KEY];
 
 export const { selectAll: selectAllPets, selectEntities } =
   PetsAdapter.getSelectors(selectPetsFeature);
@@ -191,7 +189,7 @@ export const selectFavouritePets = createSelector(
     if (!userState.user?.favouritePets) {
       return [];
     }
-    return userState.user?.favouritePets?.map((i) => petEntities[i]);
+    return userState.user?.favouritePets.map((i) => petEntities[i]).filter((pet) => pet) as Pet[];
   },
 );
 

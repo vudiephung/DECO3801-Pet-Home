@@ -37,7 +37,7 @@ const SignUp = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
 
   const handleSignUp = async ({ email, password, confirmPassword }: SignUpFormInputs) => {
-    if (password == confirmPassword) {
+    if (password === confirmPassword) {
       await dispatch(fromUser.doSignup({ userInfo: { email, password, username } }));
       navigation.navigate('SignIn');
     }

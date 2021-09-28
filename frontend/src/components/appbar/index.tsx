@@ -25,12 +25,14 @@ const CustomAppbar = () => {
           }}
         />
         <Appbar.Content title="" />
-        <Appbar.Action
-          icon={() => <MaterialCommunityIcons name="tune" color="white" size={26} />}
-          onPress={() => {
-            setVisible(!visible);
-          }}
-        />
+        {currentTab === 'adoption' || currentTab === 'location' ? (
+          <Appbar.Action
+            icon={() => <MaterialCommunityIcons name="tune" color="white" size={26} />}
+            onPress={() => {
+              setVisible(!visible);
+            }}
+          />
+        ) : null}
       </View>
       {visible && currentTab === 'adoption' ? <AdoptionFilter /> : null}
       {visible && currentTab === 'location' ? <LocationFilter /> : null}
