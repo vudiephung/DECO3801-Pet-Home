@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import * as ExpoLocation from 'expo-location';
 
 import Map from '../../../components/Map';
@@ -9,17 +9,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
 });
+
+const { width, height } = Dimensions.get('window');
 
 const Location = () => {
   // Initial region
   const [region, setRegion] = useState({
     latitude: 0,
     longitude: 0,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    latitudeDelta: 0.01844,
+    longitudeDelta: 0.01844 * (width / height),
   });
 
   useEffect(() => {
@@ -30,7 +32,11 @@ const Location = () => {
         return;
       }
       const { coords } = await ExpoLocation.getCurrentPositionAsync({});
-      setRegion({ ...region, latitude: coords.latitude, longitude: coords.longitude });
+      setRegion({
+        ...region,
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
     })();
   }, []);
 
