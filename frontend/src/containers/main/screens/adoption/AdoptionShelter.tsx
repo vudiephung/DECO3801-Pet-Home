@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -10,15 +10,22 @@ import CardItem from './CardItem';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  addButtonContainer: {
+    position: 'absolute',
+    bottom: 3,
+    right: 13,
+    zIndex: 100,
+    alignSelf: 'flex-end',
+  },
   addButton: {
     backgroundColor: theme.colors.primary,
-    width: '30%',
+    borderRadius: 100,
     alignSelf: 'center',
+    padding: 0,
   },
   addButtonText: {
     fontWeight: 'bold',
-    fontSize: 20,
-    lineHeight: 26,
+    fontSize: 30,
     color: 'white',
   },
 });
@@ -73,9 +80,11 @@ const AdoptionShelter = ({ navigation }: any) => {
         animation="fade"
         textStyle={{ color: 'white' }}
       />
-      <Button style={styles.addButton} labelStyle={styles.addButtonText} onPress={handleAddPet}>
-        +
-      </Button>
+      <View style={styles.addButtonContainer}>
+        <Button style={styles.addButton} labelStyle={styles.addButtonText} onPress={handleAddPet}>
+          +
+        </Button>
+      </View>
       <FlatList
         data={pets}
         renderItem={renderItem}

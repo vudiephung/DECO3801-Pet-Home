@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,6 +14,10 @@ const CustomAppbar = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const currentTab = useSelector(fromUser.selectCurrentTab);
+
+  useEffect(() => {
+    setVisible(false);
+  }, [currentTab]);
 
   return (
     <Appbar.Header style={{ height: visible ? 'auto' : 55, flexDirection: 'column' }}>

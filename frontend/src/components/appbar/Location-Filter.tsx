@@ -1,54 +1,58 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Slider from '@react-native-community/slider';
+import RNPickerSelect from 'react-native-picker-select';
 
 import theme from '../../core/theme';
 
 const styles = StyleSheet.create({
-  column: { flexDirection: 'column', justifyContent: 'center' },
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  container: {
+    flexDirection: 'column',
     justifyContent: 'center',
+    width: '50%',
+  },
+  label: {
+    color: theme.colors.secondary,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputAndroid: {
+    color: theme.colors.secondary,
+    marginVertical: 12,
   },
 });
 
 const LocationFilter = () => {
-  const [distance, setDistance] = useState(10);
-  const [top, setTop] = useState(10);
-
   return (
-    <View style={styles.column}>
-      <View style={styles.row}>
-        <Text>Distance: {distance}</Text>
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.label}>States</Text>
       </View>
-      <View style={styles.row}>
-        <Slider
-          style={{ width: 200, height: 40 }}
-          minimumValue={10}
-          maximumValue={100}
-          step={10}
-          minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="#000000"
-          thumbTintColor={theme.colors.active}
-          onValueChange={(value) => setDistance(value)}
-        />
+      <RNPickerSelect
+        onValueChange={(value) => console.log(value)}
+        placeholder={{ label: 'Select a type of pet...', value: null }}
+        items={[
+          { label: 'Gold Coast', value: 'dog' },
+          { label: 'Sunshine Coast', value: 'cat' },
+          { label: 'Brisbane', value: 'hamster' },
+        ]}
+        style={pickerSelectStyles}
+      />
+      <View>
+        <Text style={styles.label}>City</Text>
       </View>
-      <View style={styles.row}>
-        <Text>Top: {top}</Text>
-      </View>
-      <View style={styles.row}>
-        <Slider
-          style={{ width: 200, height: 40 }}
-          minimumValue={10}
-          maximumValue={30}
-          step={10}
-          minimumTrackTintColor="#FFFFFF"
-          maximumTrackTintColor="#000000"
-          thumbTintColor={theme.colors.active}
-          onValueChange={(value) => setTop(value)}
-        />
-      </View>
+      <RNPickerSelect
+        onValueChange={(value) => console.log(value)}
+        placeholder={{ label: 'Select a type of pet...', value: null }}
+        items={[
+          { label: 'Gold Coast', value: 'dog' },
+          { label: 'Sunshine Coast', value: 'cat' },
+          { label: 'Brisbane', value: 'hamster' },
+        ]}
+        style={pickerSelectStyles}
+      />
     </View>
   );
 };
