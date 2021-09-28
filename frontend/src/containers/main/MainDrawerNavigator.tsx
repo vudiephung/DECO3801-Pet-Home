@@ -6,10 +6,11 @@ import MainTabNavigator from './MainTabNavigator';
 import UserProfile from './screens/UserProfile';
 import FavoritePets from './screens/FavoritePets';
 import { fromUser } from '../../store';
+import SignOut from '../auth/SignOut';
 
 const Drawer = createDrawerNavigator();
 
-const MainDrawerNavigator = () => {
+const MainDrawerNavigator = ({ navigation }: any) => {
   const isShelter = useSelector(fromUser.selectIsShelter);
 
   return (
@@ -17,6 +18,8 @@ const MainDrawerNavigator = () => {
       <Drawer.Screen name="Pet Home" component={MainTabNavigator} />
       <Drawer.Screen name="My Profile" component={UserProfile} />
       {!isShelter && <Drawer.Screen name="Saved Pets" component={FavoritePets} />}
+      {/* eslint-disable-next-line react/no-children-prop */}
+      <Drawer.Screen name="Sign Out" children={() => <SignOut navigation={navigation} />} />
     </Drawer.Navigator>
   );
 };

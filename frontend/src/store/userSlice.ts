@@ -107,6 +107,10 @@ const userSlice = createSlice({
     doChangeCurrentTab(state, action) {
       state.currentTab = action.payload;
     },
+    doSignout(state) {
+      state.didLogin = false;
+      state.user = null;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(doSignin.pending, (state) => {

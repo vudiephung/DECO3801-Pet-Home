@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useNavigation } from '@react-navigation/core';
+import { DrawerActions } from '@react-navigation/routers';
 import { useSelector } from 'react-redux';
 
 import { fromUser } from '../../store';
@@ -9,6 +11,7 @@ import AdoptionFilter from './Adoption-Filter';
 import LocationFilter from './Location-Filter';
 
 const CustomAppbar = () => {
+  const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const currentTab = useSelector(fromUser.selectCurrentTab);
 
@@ -17,7 +20,9 @@ const CustomAppbar = () => {
       <View style={{ flexDirection: 'row' }}>
         <Appbar.Action
           icon={() => <MaterialCommunityIcons name="menu" color="white" size={26} />}
-          onPress={() => {}}
+          onPress={() => {
+            navigation.dispatch(DrawerActions.toggleDrawer());
+          }}
         />
         <Appbar.Content title="" />
         <Appbar.Action
