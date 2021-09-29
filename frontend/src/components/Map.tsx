@@ -1,27 +1,24 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import MapView from 'react-native-maps';
 
 const styles = StyleSheet.create({
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
 const Map = ({ initialRegion, region }) => (
-  <View>
-    <MapView
-      style={styles.map}
-      provider="google"
-      region={region}
-      initialRegion={initialRegion}
-      showsUserLocation
-      followsUserLocation
-      zoomControlEnabled
-      loadingEnabled
-    />
-  </View>
+  <MapView
+    style={styles.map}
+    provider="google"
+    region={region}
+    initialRegion={initialRegion}
+    showsUserLocation
+    followsUserLocation
+    zoomControlEnabled
+    loadingEnabled
+  />
 );
 
 export default Map;

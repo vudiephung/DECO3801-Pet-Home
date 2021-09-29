@@ -28,6 +28,7 @@ const MainTabNavigator = ({ navigation }: any) => (
           <MaterialCommunityIcons name="map-marker" color={color} size={26} />
         ),
       }}
+      initialParams={{ picture: null }}
     />
     <Tab.Screen
       name="Blog"
