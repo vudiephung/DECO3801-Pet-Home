@@ -4,8 +4,11 @@ import mongoose from 'mongoose';
 import verifyAccess from './middleware/authMiddleware';
 import authRouter from './routes/authRoutes';
 import adoptionRouter from './routes/adoptionRoutes';
+import locationRouter from './routes/locationRoutes';
 
 const app = express();
+
+app.set('trust proxy', 'loopback'); // Setup to run on UQ cloud zone
 
 app.set('view engine', 'ejs');
 
@@ -27,7 +30,8 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => {
-    app.listen(5000, () => {
+    // Port 8081 to run on UQ cloud zone
+    app.listen(8081, () => {
       console.log('Server is running.');
     });
   });
@@ -39,3 +43,5 @@ app.get('/', verifyAccess, (req, res) => {
 app.use(authRouter);
 
 app.use(adoptionRouter);
+
+app.use(locationRouter);

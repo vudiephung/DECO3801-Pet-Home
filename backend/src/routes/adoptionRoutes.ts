@@ -1,6 +1,7 @@
 import { Router } from 'express';
-import * as fs from 'fs/promises';
+import { promises as fs } from 'fs';
 import multer from 'multer';
+import { ManagedUpload } from 'aws-sdk/clients/s3';
 
 import User from '../models/User';
 import Pet from '../models/Pet';
@@ -23,7 +24,7 @@ router.get('/all-pets', verifyAccess, async (req, res) => {
     res.status(200).json(pet);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -41,7 +42,7 @@ router.get('/filtered-pets/:type', verifyAccess, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -49,11 +50,11 @@ router.get('/filtered-pets/:type', verifyAccess, async (req, res) => {
 router.get('/user-favorite-pets', verifyAccess, async (req, res) => {
   try {
     const user = await User.findById((req as any).userId).exec();
-    const favPets = await Pet.find({ _id: { $in: user.favoritePets } });
+    const favPets = await Pet.find({ _id: { $in: user.favoritePets } }).exec();
     res.status(200).json(favPets);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -62,11 +63,11 @@ router.post('/user-add-favorite/:petId', verifyAccess, async (req, res) => {
   try {
     const user = await User.findById((req as any).userId).exec();
     user.favoritePets.push(petId);
-    await user.save();
+    user.save(); // await
     res.status(200).json({ success: "Added pet to user's favorite" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -76,11 +77,11 @@ router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res) => {
     const user = await User.findById((req as any).userId).exec();
     const petIndex = user.favoritePets.indexOf(petId);
     user.favoritePets.splice(petIndex, 1);
-    await user.save();
+    user.save(); // await
     res.status(200).json({ success: "Removed pet from user's favorite" });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -90,12 +91,12 @@ router.post('/user-delete-favorite/:petId', verifyAccess, async (req, res) => {
 router.get('/shelter-owned-pets', verifyAccess, async (req, res) => {
   try {
     const shelterUser = await User.findById((req as any).userId).exec();
-    const resultPet = await Pet.find({ _id: { $in: shelterUser.ownedPets } });
+    const resultPet = await Pet.find({ _id: { $in: shelterUser.ownedPets } }).exec();
 
     res.status(200).json(resultPet);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -117,20 +118,25 @@ router.delete('/shelter-delete-pet/:petId', verifyAccess, async (req, res) => {
     res.status(200).json({ success: 'Pet successfully deleted' });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
 router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (req, res) => {
   try {
     // Upload the image(s) to S3 then delete local image(s)
-    const imageKeys: string[] = [];
+    let imageKeys: string[] = [];
     if (req.files) {
-      for (let i = 0; i < req.files.length; i++) {
-        const { Key } = await S3.uploadImage((req.files as Express.Multer.File[])[i]);
-        imageKeys.push(Key);
-        fs.unlink((req.files as Express.Multer.File[])[i].path); // await
-      }
+      const uploadList: Promise<ManagedUpload.SendData>[] = [];
+      (req.files as Express.Multer.File[]).forEach(file => {
+        uploadList.push(S3.uploadImage(file));
+      });
+      const results = await Promise.all(uploadList);
+      imageKeys = results.map(res => res.Key);
+
+      (req.files as Express.Multer.File[]).forEach(
+        file => fs.unlink(file.path) // await
+      );
     }
     // Create the new Pet document
     const { name, type, breed, age, description } = req.body;
@@ -149,7 +155,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
     res.status(201).json({ petId: pet._id, images: (pet as any).images });
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
@@ -174,18 +180,23 @@ router.put('/shelter-edit-pet/:petId', upload.array('image', 3), verifyAccess, a
     }
     // Store newly uploaded images to S3, add their keys to the pet doc then delete from local storage
     if (req.files) {
-      for (let i = 0; i < req.files.length; i++) {
-        const { Key } = await S3.uploadImage((req.files as Express.Multer.File[])[i]);
-        pet.images.push(Key);
-        fs.unlink((req.files as Express.Multer.File[])[i].path); // await
-      }
+      const uploadList: Promise<ManagedUpload.SendData>[] = [];
+      (req.files as Express.Multer.File[]).forEach(file => {
+        uploadList.push(S3.uploadImage(file));
+      });
+      const results = await Promise.all(uploadList);
+      results.forEach(res => pet.images.push(res.Key));
+
+      (req.files as Express.Multer.File[]).forEach(
+        file => fs.unlink(file.path) // await
+      );
     }
     // Save the updated pet doc to db and respond it back
     await pet.save();
     res.status(200).json(pet);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong' });
+    res.status(500).json({ error: err });
   }
 });
 
