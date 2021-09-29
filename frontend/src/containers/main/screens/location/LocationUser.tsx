@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Dimensions, Image, StyleSheet, View } from 'react-native';
+import { Alert, Dimensions, StyleSheet, View } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
 import * as ExpoLocation from 'expo-location';
 
-import Map from '../../../components/Map';
-import Button from '../../../components/Button';
-import theme from '../../../core/theme';
+import Map from '../../../../components/Map';
+import theme from '../../../../core/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,10 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Location = ({ route, navigation }) => {
-  // Use global store (redux) instead of route.params
-  const { picture } = route.params;
-
+const Location = ({ navigation }) => {
   // Initial region
   const [region, setRegion] = useState({
     latitude: -25.2744,
@@ -84,55 +80,19 @@ const Location = ({ route, navigation }) => {
     })();
   }, []);
 
-  // Upload picture
-  const handleUploadPicture = (picture) => {
-    console.log(picture);
-    navigation.navigate('Location', { picture: null });
-  };
-
   return (
     <View style={styles.container}>
       <Map initialRegion={region} region={region} />
       <View style={styles.buttonContainer}>
         <View style={[styles.bubble]}>
-          {picture === null ? (
-            <IconButton
-              style={styles.button}
-              icon="camera"
-              size={36}
-              onPress={() => navigation.navigate('Camera')}
-            />
-          ) : (
-            <View style={styles.cardContainer}>
-              <View style={styles.imageContainer}>
-                <Image source={route.params.picture} style={styles.image} />
-              </View>
-              <IconButton
-                style={styles.button}
-                icon="camera"
-                size={36}
-                onPress={() => navigation.navigate('Camera')}
-              />
-              <Button
-                mode="contained"
-                style={styles.uploadButton}
-                labelStyle={[styles.buttonText, { color: theme.colors.primary }]}
-                onPress={() => {
-                  handleUploadPicture(picture);
-                }}>
-                Upload
-              </Button>
-              <Button
-                mode="contained"
-                style={styles.deleteButton}
-                labelStyle={styles.buttonText}
-                onPress={() => {
-                  navigation.navigate('Location', { picture: null });
-                }}>
-                Cancel
-              </Button>
-            </View>
-          )}
+          <IconButton
+            style={styles.button}
+            icon="camera"
+            size={36}
+            onPress={() => {
+              navigation.navigate('LocationPickImages', region);
+            }}
+          />
         </View>
       </View>
     </View>

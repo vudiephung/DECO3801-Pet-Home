@@ -80,8 +80,8 @@ const EditPet = ({ route, navigation }: any) => {
           numberOfLines={7}
           value={(() => {
             let desString = '';
-            for (let paragraph of description) {
-              desString = desString + paragraph + '\n';
+            for (const paragraph of description) {
+              desString = `${desString + paragraph}\n`;
             }
             return desString;
           })()}

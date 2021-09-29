@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
-import { StyleSheet } from 'react-native';
-import { View, Text, Image } from 'react-native';
-import { fromUser } from '../../../store';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { useSelector } from 'react-redux';
+
+import { fromUser } from '../../../store';
 import theme from '../../../core/theme';
 
 const styles = StyleSheet.create({

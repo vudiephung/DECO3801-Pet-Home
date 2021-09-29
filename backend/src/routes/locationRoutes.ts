@@ -1,14 +1,15 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import * as S3 from '../utilities/s3';
 import * as fs from 'fs/promises';
 import multer from 'multer';
 import * as path from 'path';
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 import { Client, LatLng, AddressType } from '@googlemaps/google-maps-services-js';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
 
+import * as S3 from '../utilities/s3';
 import verifyAccess from '../middleware/authMiddleware';
 import Zone from '../models/Zones';
+
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 const router = Router();
 const upload = multer({ dest: './pet-image-uploads/' });

@@ -7,7 +7,7 @@ import { RootSiblingParent } from 'react-native-root-siblings';
 
 import CustomAppbar from './src/components/CustomAppbar';
 import CustomAppbarCamera from './src/components/CustomAppbarCamera';
-import UserCamera from './src/containers/main/screens/UserCamera';
+import UserCamera from './src/containers/main/screens/location/UserCamera';
 import SignIn from './src/containers/auth/SignIn';
 import SignUp from './src/containers/auth/SignUp';
 import MainDrawerNavigator from './src/containers/main/MainDrawerNavigator';

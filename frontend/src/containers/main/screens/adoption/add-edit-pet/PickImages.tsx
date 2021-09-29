@@ -4,10 +4,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { AssetsSelector } from 'expo-images-picker';
 import { MediaType } from 'expo-media-library';
 import { useSelector } from 'react-redux';
-import { baseURL } from '../../../../../services/config';
-import Constants from 'expo-constants';
 import Toast from 'react-native-root-toast';
 
+import { baseURL } from '../../../../../services/config';
 import theme from '../../../../../core/theme';
 import { fromPets, fromUser, useAppDispatch } from '../../../../../store';
 
@@ -58,7 +57,8 @@ const ImageItem = ({ imageId, iconOnPress }: any) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }}></Image>
+        }}
+      />
       <Ionicons
         name="close-circle-sharp"
         size={25}
@@ -79,16 +79,17 @@ const PickImages = ({ route, navigation }: any) => {
   const deletedImageIds = useRef<string[]>([]);
 
   const onSuccess = async (data: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     showAlert(
       'Are you sure you want to submit?',
-      mode == 'ADD'
+      mode === 'ADD'
         ? 'This pet will be uploaded as a new pet'
         : 'This pet will be updated with the new information provided',
       async () => {
         const images = data.map((element: any) => {
           return { uri: element.uri, name: element.filename };
         });
-        if (mode == 'ADD') {
+        if (mode === 'ADD') {
           await dispatch(fromPets.doAddPet({ petInfo: petData, images }));
         } else {
           await dispatch(
@@ -122,8 +123,8 @@ const PickImages = ({ route, navigation }: any) => {
       getImageMetaData: false, // true might perform slower results
       initialLoad: 100,
       assetsType: [MediaType.photo],
-      minSelection: mode == 'ADD' ? 1 : 0,
-      maxSelection: mode == 'ADD' ? 3 : 3 - uploadedList.length,
+      minSelection: mode === 'ADD' ? 1 : 0,
+      maxSelection: mode === 'ADD' ? 3 : 3 - uploadedList.length,
       portraitCols: 4,
       landscapeCols: 4,
     }),
@@ -148,8 +149,8 @@ const PickImages = ({ route, navigation }: any) => {
         selected: 'selected',
       },
       midTextColor: 'black',
-      minSelection: mode == 'ADD' ? 1 : 0,
-      maxSelection: mode == 'ADD' ? 3 : 3 - uploadedList.length,
+      minSelection: mode === 'ADD' ? 1 : 0,
+      maxSelection: mode === 'ADD' ? 3 : 3 - uploadedList.length,
       buttonTextStyle: textStyle,
       buttonStyle,
       onBack: () => {
@@ -211,8 +212,8 @@ const PickImages = ({ route, navigation }: any) => {
   const handleDeleteUploadedImage = (imageId: string) => {
     showAlert('Are you sure you want to delete this image?', 'This can not be undone', () => {
       deletedImageIds.current.push(imageId);
-      const updatedList = uploadedList.filter((id) => id != imageId);
-      if (updatedList.length == 0) {
+      const updatedList = uploadedList.filter((id) => id !== imageId);
+      if (updatedList.length === 0) {
         widgetNavigator.minSelection = 1;
         widgetSettings.minSelection = 1;
       }
@@ -223,7 +224,7 @@ const PickImages = ({ route, navigation }: any) => {
   };
 
   useEffect(() => {
-    if (mode == 'ADD') {
+    if (mode === 'ADD') {
       showToastMessage('The maximum number of images you can choose is 3');
     } else {
       showToastMessage('The maximum number of uploaded and newly chosen images combined is 3');
@@ -232,12 +233,13 @@ const PickImages = ({ route, navigation }: any) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {mode == 'EDIT' && <Text style={styles.sectionTitle}>Uploaded Images</Text>}
-      {mode == 'EDIT' && (
+      {mode === 'EDIT' && <Text style={styles.sectionTitle}>Uploaded Images</Text>}
+      {mode === 'EDIT' && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           {uploadedList.length > 0 ? (
             <ScrollView>
               {uploadedList.map((imageId: string, index: number) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <ImageItem key={index} imageId={imageId} iconOnPress={handleDeleteUploadedImage} />
               ))}
             </ScrollView>
@@ -247,7 +249,7 @@ const PickImages = ({ route, navigation }: any) => {
         </View>
       )}
       <View style={{ flex: 1 }}>
-        {mode == 'EDIT' && <Text style={styles.sectionTitle}>Choose New Images</Text>}
+        {mode === 'EDIT' && <Text style={styles.sectionTitle}>Choose New Images</Text>}
         <AssetsSelector
           Settings={widgetSettings}
           Errors={widgetErrors}

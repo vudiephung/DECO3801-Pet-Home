@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Adoption from './screens/adoption';
 import Blog from './screens/Blog';
 import Donation from './screens/Donation';
-import Location from './screens/Location';
+import Location from './screens/location';
 
 const Tab = createMaterialBottomTabNavigator();
 
