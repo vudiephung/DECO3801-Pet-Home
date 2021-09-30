@@ -1,5 +1,4 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
@@ -8,11 +7,8 @@ import Adoption from './screens/adoption';
 import Blog from './screens/Blog';
 import Donation from './screens/Donation';
 import Location from './screens/location';
-import Zone from './screens/location/Zone';
 import theme from '../../core/theme';
 import { fromUser } from '../../store';
-
-const LocationStack = createStackNavigator();
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -33,24 +29,15 @@ const MainTabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="LocationTab"
-        // eslint-disable-next-line react/no-children-prop
-        children={() => (
-          <LocationStack.Navigator initialRouteName="Location">
-            <LocationStack.Screen
-              name="Location"
-              component={Location}
-              options={{ headerShown: false }}
-            />
-            <LocationStack.Screen name="Zone" component={Zone} options={{ headerShown: false }} />
-          </LocationStack.Navigator>
-        )}
+        name="Location"
+        component={Location}
         options={{
           tabBarLabel: 'Location',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="map-marker" color={color} size={26} />
           ),
         }}
+        initialParams={{ picture: null }}
       />
       {!isShelter ? (
         <Tab.Screen

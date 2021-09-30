@@ -14,6 +14,7 @@ const CustomAppbar = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const currentTab = useSelector(fromUser.selectCurrentTab);
+  const isShelter = useSelector(fromUser.selectIsShelter);
 
   useEffect(() => {
     setVisible(false);
@@ -29,7 +30,7 @@ const CustomAppbar = () => {
           }}
         />
         <Appbar.Content title="" />
-        {currentTab === 'adoption' || currentTab === 'location' ? (
+        {currentTab === 'adoption' || (currentTab === 'location' && isShelter) ? (
           <Appbar.Action
             icon={() => <MaterialCommunityIcons name="tune" color="white" size={26} />}
             onPress={() => {
