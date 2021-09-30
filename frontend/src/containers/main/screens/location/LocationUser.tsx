@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   bubble: {
-    backgroundColor: 'rgba(145, 118, 129, 0.5)',
+    backgroundColor: theme.colors.button,
+    opacity: 0.8,
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,

@@ -10,7 +10,7 @@ const SignOut = ({ navigation }: SignOutProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fromUser.doSignout);
+    dispatch(fromUser.doSignout());
     navigation.navigate('SignIn');
   }, []);
 

@@ -70,8 +70,8 @@ export const doSignup = createAsyncThunk(
   },
 );
 
-export const doSignout = createAsyncThunk('auth/signout', () => {
-  deleteData(tokenKey);
+export const doSignout = createAsyncThunk('auth/signout', async () => {
+  await deleteData(tokenKey);
 });
 
 export const doAddFavoritePet = createAsyncThunk(
@@ -105,10 +105,6 @@ const userSlice = createSlice({
     doChangeCurrentTab(state, action) {
       state.currentTab = action.payload;
     },
-    doSignout(state) {
-      state.didLogin = false;
-      state.user = null;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(doSignin.pending, (state) => {
@@ -139,7 +135,7 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doSignout.fulfilled, (state) => {
-      state.didLogin = true;
+      state.didLogin = false;
       state.user = null;
       state.loading = false;
     });

@@ -6,6 +6,7 @@ import {
   EntityState,
 } from '@reduxjs/toolkit';
 
+import { fromUser } from '.';
 import { Pet } from '../models/pet';
 import { PetsService } from '../services';
 import { PETS_FEATURE_KEY, USER_FEATURE_KEY } from './keywords';
@@ -120,6 +121,9 @@ const petsSlice = createSlice({
   initialState: createInitialState(),
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(fromUser.doSignout.fulfilled, (state) => {
+      PetsAdapter.removeAll(state);
+    });
     builder.addCase(doGetPets.pending, (state) => {
       state.loading = true;
     });
