@@ -8,9 +8,11 @@ import { ManagedUpload } from 'aws-sdk/clients/s3';
 import * as S3 from '../utilities/s3';
 import verifyAccess from '../middleware/authMiddleware';
 import Zone from '../models/Zones';
+import helperMethod from '../utilities/helper';
 
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
+const helper = new helperMethod();
 const router = Router();
 const upload = multer({ dest: './pet-image-uploads/' });
 
@@ -84,5 +86,33 @@ router.post(
     }
   }
 );
+
+// Filter zone based on states and cities req
+router.get('/filter-zone', verifyAccess, async( req: Request, res: Response, next: NextFunction ) => {
+  try {
+    const { state, city} = req.body;
+    const result = await Zone.find({ state: state, city: city},' locality locations').exec();
+    console.log(result);
+    res.status(200).json(result);
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+
+//  Fetch out all states and these cities in each state.
+router.get('/all-cities', verifyAccess, async(req: Request, res: Response, next: NextFunction) => {
+  try {  
+    const data = await Zone.find({},' -_id state city').exec();
+    const result = helper.groupBy(data, 'state');
+
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Something went wrong'});
+  }
+});
+
 
 export default router;

@@ -25,18 +25,25 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const LocationFilter = () => {
+  const [state, setState] = useState<string | null>(null);
+  console.log(state);
+
   return (
     <View style={styles.container}>
       <View>
         <Text style={styles.label}>States</Text>
       </View>
       <RNPickerSelect
-        onValueChange={(value) => console.log(value)}
+        onValueChange={(value) => setState(value)}
         placeholder={{ label: 'Select a type of pet...', value: null }}
         items={[
-          { label: 'Gold Coast', value: 'dog' },
-          { label: 'Sunshine Coast', value: 'cat' },
-          { label: 'Brisbane', value: 'hamster' },
+          { label: 'New South Wales', value: 'NSW' },
+          { label: 'Queensland', value: 'QLD' },
+          { label: 'South Australia', value: 'SA' },
+          { label: 'Tasmania', value: 'TAS' },
+          { label: 'Victoria', value: 'VIC' },
+          { label: 'Western Australia', value: 'WA' },
+          { label: 'Northen Territory', value: 'NT' },
         ]}
         style={pickerSelectStyles}
       />
