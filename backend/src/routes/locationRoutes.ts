@@ -103,8 +103,19 @@ router.get('/filter-zone', verifyAccess, async( req: Request, res: Response, nex
 router.get('/all-cities', verifyAccess, async(req: Request, res: Response, next: NextFunction) => {
   try {  
     const data = await Zone.find({},' -_id state city').exec();
-    const result = helper.groupBy(data, 'state');
-
+    //get the distinct cities in states.
+    const distinct = [];
+    const map = new Map();
+    for (const item of data) {
+        if(!map.has(item.city)){
+            map.set(item.city, true);    // set states, cities to Map
+            distinct.push({
+                state: item.state,
+                city: item.city
+            });
+        }
+    }
+    const result = helper.groupBy(distinct, 'state');
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
