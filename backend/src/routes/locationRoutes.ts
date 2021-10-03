@@ -40,20 +40,38 @@ router.post(
       const geocodeResponse = await mapsClient.reverseGeocode({
         params: {
           latlng: coordinates,
-          result_type: [
-            AddressType.locality,
-            AddressType.administrative_area_level_2,
-            AddressType.administrative_area_level_1,
-          ],
           key: process.env.MAPS_API_KEY as string,
         },
       });
 
       // Store new location into database
-      const addressComponents = geocodeResponse.data.results[0].address_components;
-      const locality = addressComponents[0].short_name;
-      const city = addressComponents[1].short_name;
-      const state = addressComponents[2].short_name;
+      let locality = '';
+      let city = '';
+      let state = '';
+      for (let i = 0; i < geocodeResponse.data.results.length; i++) {
+        const result = geocodeResponse.data.results[i];
+        if (
+          result.types.includes(AddressType.locality) ||
+          result.types.includes(AddressType.administrative_area_level_2) ||
+          result.types.includes(AddressType.administrative_area_level_1)
+        ) {
+          result.address_components.forEach(component => {
+            if (component.types.includes(AddressType.locality) && locality === '') {
+              locality = component.short_name;
+            }
+            if (component.types.includes(AddressType.administrative_area_level_2) && city === '') {
+              city = component.short_name;
+            }
+            if (component.types.includes(AddressType.administrative_area_level_1) && state === '') {
+              state = component.short_name;
+            }
+          });
+        }
+        if (locality !== '' && city !== '' && state !== '') {
+          break;
+        }
+      }
+
       const zone = await Zone.findOne({ state, city, locality }).exec();
       if (zone) {
         zone.locations.push({
@@ -79,7 +97,7 @@ router.post(
       res.status(201).json({ success: 'New location successfully added' });
     } catch (err) {
       console.log(err);
-      res.status(500).json({ error: 'Something went wrong' });
+      res.status(500).json({ error: err });
     }
   }
 );
