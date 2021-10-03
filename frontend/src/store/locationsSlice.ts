@@ -1,22 +1,19 @@
-import { createAsyncThunk, createEntityAdapter, createSlice, EntityState } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 
-import { Location } from '../models/location';
 import { LocationService } from '../services';
+import { LOCATIONS_FEATURE_KEY } from './keywords';
 
-const LocationsAdaptor = createEntityAdapter<Location>({
-  selectId: (location) => location._id,
-});
-
-interface LocationsState extends EntityState<Location> {
+interface LocationsState {
   loading: boolean;
-  selectedId: Location['_id'] | null;
+  state: string;
+  city: string;
 }
 
-export const createInitialState = (): LocationsState =>
-  LocationsAdaptor.getInitialState({
-    loading: false,
-    selectedId: null,
-  });
+export const createInitialState = (): LocationsState => ({
+  loading: false,
+  state: '',
+  city: '',
+});
 
 export const doAddLocation = createAsyncThunk(
   '/addPetLocation',
@@ -44,7 +41,12 @@ export const doAddLocation = createAsyncThunk(
 const locationSlice = createSlice({
   name: 'locations',
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doFilter(state, action) {
+      state.state = action.payload.state;
+      state.city = action.payload.city;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(doAddLocation.pending, (state) => {
       state.loading = true;
@@ -54,5 +56,16 @@ const locationSlice = createSlice({
     });
   },
 });
+
+const selectLocationFeature = (state: any) => state[LOCATIONS_FEATURE_KEY];
+
+export const selectFilter = createSelector(selectLocationFeature, (locationState) => {
+  return {
+    state: locationState.state,
+    city: locationState.city,
+  };
+});
+
+export const { doFilter } = locationSlice.actions;
 
 export default locationSlice.reducer;

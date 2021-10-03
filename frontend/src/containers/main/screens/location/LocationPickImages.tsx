@@ -3,7 +3,6 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AssetsSelector } from 'expo-images-picker';
 import { MediaType } from 'expo-media-library';
-import Constants from 'expo-constants';
 
 import theme from '../../../../core/theme';
 import { fromLocations, useAppDispatch } from '../../../../store';
@@ -11,7 +10,7 @@ import { fromLocations, useAppDispatch } from '../../../../store';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Constants.statusBarHeight,
+    paddingTop: 10,
     backgroundColor: 'white',
   },
 });
@@ -55,7 +54,7 @@ const LocationPickImages = ({ route, navigation }: any) => {
   );
 
   const textStyle = {
-    color: theme.colors.primary,
+    color: 'white',
     fontWeight: 'bold' as 'bold',
   };
 

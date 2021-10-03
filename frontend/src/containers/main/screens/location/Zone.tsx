@@ -3,9 +3,12 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import Modal from 'react-native-modal';
 import openMap from 'react-native-open-maps';
+import { useSelector } from 'react-redux';
+import { SliderBox } from 'react-native-image-slider-box';
 
-import Location from '../../../../models/location';
 import Button from '../../../../components/Button';
+import { baseURL } from '../../../../services/config';
+import { fromUser } from '../../../../store';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,39 +22,37 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     ...StyleSheet.absoluteFillObject,
   },
+  modal: {
+    width: '100%',
+  },
 });
 
 const Zone = ({ route }: any) => {
-  const { rank } = route.params;
-  console.log(rank);
-  const [selectedLocation, setSelectedLocation] = useState<null | Location>(null);
+  const { zone } = route.params;
+  const [selectedIndex, setSelectedIndex] = useState<null | number>(null);
+  const [images, setImages] = useState([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const token = useSelector(fromUser.selectToken);
 
-  const locations = [
-    {
-      latitude: 37.42273010379259,
-      longitude: -122.08003741212114,
-    },
-    {
-      latitude: 37.40795644334263,
-      longitude: -122.09548638770042,
-    },
-    {
-      latitude: 37.423429954309334,
-      longitude: -122.10489356315546,
-    },
-    {
-      latitude: 37.41644075799896,
-      longitude: -122.12243339351996,
-    },
-    {
-      latitude: 37.40729577401165,
-      longitude: -122.05804222080211,
-    },
-  ];
+  const locations = zone.locations.map((location) => {
+    return {
+      longitude: location.longitude,
+      latitude: location.latitude,
+    };
+  });
 
-  const handleMarkerPress = (marker: Location) => {
-    setSelectedLocation(marker);
+  const handleMarkerPress = (index: number) => {
+    setSelectedIndex(index);
+    setImages(
+      zone.locations[index].images.map((image: string) => {
+        return {
+          uri: `${baseURL}/image/${image}`,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      }),
+    );
     setOpenModal(true);
   };
 
@@ -60,7 +61,10 @@ const Zone = ({ route }: any) => {
   };
 
   const handleButtonPress = () => {
-    openMap({ end: `${selectedLocation?.latitude}, ${selectedLocation?.longitude}` });
+    if (selectedIndex) {
+      const location = zone.locations[selectedIndex];
+      openMap({ end: `${location?.latitude}, ${location?.longitude}` });
+    }
   };
 
   return (
@@ -77,12 +81,15 @@ const Zone = ({ route }: any) => {
             // eslint-disable-next-line react/no-array-index-key
             key={index}
             coordinate={marker}
-            onPress={() => handleMarkerPress(marker)}
+            onPress={() => handleMarkerPress(index)}
           />
         ))}
       </MapView>
       <Modal isVisible={openModal} onBackdropPress={closeModal} onBackButtonPress={closeModal}>
-        <Button onPress={handleButtonPress}>Open Map</Button>
+        <View style={styles.modal}>
+          {images && <SliderBox images={images} />}
+          <Button onPress={handleButtonPress}>Open Map</Button>
+        </View>
       </Modal>
     </View>
   );

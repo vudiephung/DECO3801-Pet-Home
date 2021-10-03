@@ -90,9 +90,9 @@ router.post(
 // Filter zone based on states and cities req
 router.get('/filter-zone', verifyAccess, async( req: Request, res: Response, next: NextFunction ) => {
   try {
-    const { state, city} = req.body;
+    const { state } = req.query;
+    const { city } = req.query;
     const result = await Zone.find({ state: state, city: city},' locality locations').exec();
-    console.log(result);
     res.status(200).json(result);
   } catch (err) {
       console.log(err);

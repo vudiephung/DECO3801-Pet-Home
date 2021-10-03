@@ -21,3 +21,8 @@ export const addPetLocation = async (
   });
   return res.data;
 };
+
+export const getCities = async () => (await instance.get('/all-cities')).data;
+
+export const getZones = async (filter) =>
+  (await instance.get('/filter-zone', { params: { state: filter.state, city: filter.city } })).data;
