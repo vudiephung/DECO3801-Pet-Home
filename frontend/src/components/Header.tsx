@@ -10,7 +10,7 @@ type Props = {
 const styles = StyleSheet.create({
   header: {
     fontSize: 26,
-    color: theme.colors.primary,
+    color: theme.colors.secondary,
     fontWeight: 'bold',
     paddingVertical: 14,
   },

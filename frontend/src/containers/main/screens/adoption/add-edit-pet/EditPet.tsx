@@ -5,7 +5,12 @@ import RNPickerSelect from 'react-native-picker-select';
 import TextInput from '../../../../../components/TextInput';
 
 const styles = StyleSheet.create({
-  center: {},
+  center: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
   modalView: {
     flexGrow: 1,
     justifyContent: 'center',
@@ -39,7 +44,7 @@ const EditPet = ({ route, navigation }: any) => {
   const [description, setDescription] = useState<string[]>(pet.description);
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.center}>
       <View style={styles.modalView}>
         <TextInput
           label="Name"
@@ -80,8 +85,8 @@ const EditPet = ({ route, navigation }: any) => {
           numberOfLines={7}
           value={(() => {
             let desString = '';
-            for (let paragraph of description) {
-              desString = desString + paragraph + '\n';
+            for (const paragraph of description) {
+              desString = `${desString + paragraph}\n`;
             }
             return desString;
           })()}

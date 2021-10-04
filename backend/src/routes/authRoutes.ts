@@ -93,6 +93,7 @@ router.post('/signin', async (req, res) => {
           isShelter: true,
           address: user.address,
           contactNumber: user.contactNumber,
+          favouritePets: user.favouritePets,
           token,
         });
       }

@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 4,
   },
-  label: {
-    color: theme.colors.secondary,
+  normal: {
+    color: 'black',
   },
   link: {
     fontWeight: 'bold',
-    color: theme.colors.primary,
+    color: theme.colors.secondary,
   },
 });
 
@@ -37,7 +37,7 @@ const SignUp = ({ navigation }: any) => {
   const dispatch = useAppDispatch();
 
   const handleSignUp = async ({ email, password, confirmPassword }: SignUpFormInputs) => {
-    if (password == confirmPassword) {
+    if (password === confirmPassword) {
       await dispatch(fromUser.doSignup({ userInfo: { email, password, username } }));
       navigation.navigate('SignIn');
     }
@@ -76,7 +76,7 @@ const SignUp = ({ navigation }: any) => {
         Sign Up
       </Button>
       <View style={styles.row}>
-        <Text style={styles.label}>Already have an account? </Text>
+        <Text style={styles.normal}>Already have an account? </Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
           <Text style={styles.link}>Sign In</Text>
         </TouchableOpacity>

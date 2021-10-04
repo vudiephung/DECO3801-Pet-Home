@@ -1,10 +1,20 @@
+import { useFocusEffect } from '@react-navigation/native';
 import React from 'react';
 import { View, Text } from 'react-native';
 
-const Blog = () => (
-  <View>
-    <Text>Blog</Text>
-  </View>
-);
+import { fromUser, useAppDispatch } from '../../../store';
+
+const Blog = () => {
+  const dispatch = useAppDispatch();
+  useFocusEffect(() => {
+    dispatch(fromUser.doChangeCurrentTab('blog'));
+  });
+
+  return (
+    <View>
+      <Text>Blog</Text>
+    </View>
+  );
+};
 
 export default Blog;

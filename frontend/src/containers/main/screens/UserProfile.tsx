@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
-import { StyleSheet } from 'react-native';
-import { View, Text, Image } from 'react-native';
-import { fromUser } from '../../../store';
+import React from 'react';
+import { StyleSheet, View, Text, Image } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+
+import { fromUser, useAppDispatch } from '../../../store';
 import theme from '../../../core/theme';
 
 const styles = StyleSheet.create({
@@ -56,6 +57,10 @@ const InfoField = ({ label, content }: Field) => {
 const UserProfile = () => {
   const isShelter = useSelector(fromUser.selectIsShelter);
   const user = useSelector(fromUser.selectUser);
+  const dispatch = useAppDispatch();
+  useFocusEffect(() => {
+    dispatch(fromUser.doChangeCurrentTab('profile'));
+  });
 
   const randomUserAvatar = 'https://source.unsplash.com/800x600/?portrait,face';
   const randomShelterAvatar = 'https://source.unsplash.com/800x600/?store,pet';

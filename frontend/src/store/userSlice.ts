@@ -4,17 +4,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
 import { Pet } from '../models/pet';
-import { AppState } from '.';
 import { setAuthToken } from '../services/config';
+import { USER_FEATURE_KEY } from './keywords';
 
 interface UserState {
   user: User | null;
   loading: boolean;
   didLogin: boolean;
+  currentTab: string;
   // errors: any[];
 }
-
-export const USER_FEATURE_KEY = 'user';
 
 const tokenKey: string = 'token';
 
@@ -38,6 +37,7 @@ export const createInitialState = (): UserState => ({
   user: null,
   loading: false,
   didLogin: false,
+  currentTab: 'adoption',
   // errors: [],
 });
 
@@ -70,8 +70,8 @@ export const doSignup = createAsyncThunk(
   },
 );
 
-export const doSignout = createAsyncThunk('auth/signout', () => {
-  deleteData(tokenKey);
+export const doSignout = createAsyncThunk('auth/signout', async () => {
+  await deleteData(tokenKey);
 });
 
 export const doAddFavoritePet = createAsyncThunk(
@@ -101,7 +101,11 @@ export const doDeleteFavoritePet = createAsyncThunk(
 const userSlice = createSlice({
   name: USER_FEATURE_KEY,
   initialState: createInitialState(),
-  reducers: {},
+  reducers: {
+    doChangeCurrentTab(state, action) {
+      state.currentTab = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(doSignin.pending, (state) => {
       state.loading = true;
@@ -131,7 +135,7 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(doSignout.fulfilled, (state) => {
-      state.didLogin = true;
+      state.didLogin = false;
       state.user = null;
       state.loading = false;
     });
@@ -153,7 +157,7 @@ const userSlice = createSlice({
   },
 });
 
-const selectAuthFeature = (state: AppState) => state[USER_FEATURE_KEY];
+const selectAuthFeature = (state: any) => state[USER_FEATURE_KEY];
 
 export const selectIsAuthenticated = createSelector(
   selectAuthFeature,
@@ -165,6 +169,11 @@ export const selectIsShelter = createSelector(
   (userState) => userState.user?.isShelter,
 );
 
+export const selectCurrentTab = createSelector(
+  selectAuthFeature,
+  (userState) => userState.currentTab,
+);
+
 export const selectFavPetIds = createSelector(
   selectAuthFeature,
   (userState) => userState.user?.favouritePets,
@@ -173,5 +182,6 @@ export const selectFavPetIds = createSelector(
 export const selectUser = createSelector(selectAuthFeature, (userState) => userState.user);
 
 export const selectToken = createSelector(selectAuthFeature, (userState) => userState.user?.token);
+export const { doChangeCurrentTab } = userSlice.actions;
 
 export default userSlice.reducer;

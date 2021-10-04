@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 4,
   },
-  label: {
-    color: theme.colors.secondary,
+  normal: {
+    color: 'black',
   },
   link: {
     fontWeight: 'bold',
-    color: theme.colors.primary,
+    color: theme.colors.secondary,
   },
 });
 
@@ -69,14 +69,14 @@ const SignIn = ({ navigation }) => {
       />
       <View style={styles.forgotPassword}>
         <TouchableOpacity onPress={() => {}}>
-          <Text style={styles.label}>Forgot your password?</Text>
+          <Text style={styles.link}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
       <Button mode="contained" onPress={async () => handleSignIn({ email, password })}>
         Sign In
       </Button>
       <View style={styles.row}>
-        <Text style={styles.label}>Don’t have an account? </Text>
+        <Text style={styles.normal}>Don’t have an account? </Text>
         <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
           <Text style={styles.link}>Sign up</Text>
         </TouchableOpacity>
