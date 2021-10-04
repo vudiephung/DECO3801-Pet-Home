@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 
 const LocationShelter = ({ navigation }: any) => {
   const [zones, setZones] = useState(null);
-  const filter = useSelector(fromLocations.selectFilter);
+  const filter: { state: string; city: string } = useSelector(fromLocations.selectFilter);
 
   useEffect(() => {
     (async () => {
