@@ -1,7 +1,7 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, List, Snackbar } from 'react-native-paper';
+import { Avatar, Colors, List, Snackbar } from 'react-native-paper';
 
 import { fromUser, useAppDispatch } from '../../../store';
 import theme from '../../../core/theme';
@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
   shelterContainer: {
     borderRadius: 50,
     backgroundColor: theme.colors.primary,
+  },
+  title: {
+    color: Colors.black,
   },
   row: {
     flexDirection: 'row',
@@ -100,6 +103,7 @@ const Donation = () => {
         </View>
         <List.Section title="Select a shelter">
           <List.Accordion
+            titleStyle={styles.title}
             style={styles.shelterContainer}
             left={() => <List.Icon icon="home-search" />}
             title={selectedShelter}
