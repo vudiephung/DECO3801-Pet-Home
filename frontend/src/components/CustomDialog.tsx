@@ -11,7 +11,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const CustomDialog = ({ visible, close }: { visible: boolean; close: () => void }) => (
+const CustomDialog = ({
+  visible,
+  close,
+  onSubmitDonate,
+}: {
+  visible: boolean;
+  close: () => void;
+  onSubmitDonate: () => void;
+}) => (
   <Portal>
     <Dialog onDismiss={close} visible={visible} style={styles.dialog}>
       <Dialog.Title>Confirmation</Dialog.Title>
@@ -22,7 +30,7 @@ const CustomDialog = ({ visible, close }: { visible: boolean; close: () => void 
         <Button color="black" labelStyle={styles.buttonText} onPress={close}>
           Cancel
         </Button>
-        <Button color="black" labelStyle={styles.buttonText} onPress={close}>
+        <Button color="black" labelStyle={styles.buttonText} onPress={onSubmitDonate}>
           OK
         </Button>
       </Dialog.Actions>

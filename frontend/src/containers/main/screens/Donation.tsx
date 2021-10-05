@@ -1,7 +1,14 @@
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { ImageBackground, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, Colors, List, Snackbar } from 'react-native-paper';
+import {
+  Dimensions,
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Avatar, Colors, Divider, List, ProgressBar, Snackbar } from 'react-native-paper';
 
 import { fromUser, useAppDispatch } from '../../../store';
 import theme from '../../../core/theme';
@@ -11,8 +18,8 @@ import CustomDialog from '../../../components/CustomDialog';
 
 // Data
 const shelters = [
-  { id: 0, shelter: 'Animal Emergency Centre Woolloongabba' },
-  { id: 1, shelter: 'Australian Pet Welfare Foundation' },
+  { id: 0, shelter: 'Animal Emergency Centre Woolloongabba', progress: 0.7 },
+  { id: 1, shelter: 'Australian Pet Welfare Foundation', progress: 0.3 },
 ];
 
 const styles = StyleSheet.create({
@@ -30,6 +37,10 @@ const styles = StyleSheet.create({
   },
   title: {
     color: Colors.black,
+  },
+  progress: {
+    padding: 16,
+    marginVertical: 8,
   },
   row: {
     flexDirection: 'row',
@@ -58,6 +69,7 @@ const styles = StyleSheet.create({
 const Donation = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const [selectedShelter, setSelectedShelter] = useState<String | null>(null);
+  const [selectedShelterProgress, setSelectedShelterProgress] = useState<number>(0);
   const [selectedAmount, setSelectedAmount] = useState<String | null>(null);
   const [visibleDialog, setVisibleDialog] = useState<boolean>(false);
   const [visibleSnackbar, setVisibleSnackbar] = useState<boolean>(false);
@@ -65,6 +77,7 @@ const Donation = () => {
   useEffect(() => {
     // Fetch shelters
     setSelectedShelter(shelters[0].shelter);
+    setSelectedShelterProgress(shelters[0].progress);
   }, []);
 
   const onHandleExpanded = () => {
@@ -85,6 +98,11 @@ const Donation = () => {
     } else {
       setVisibleDialog(true);
     }
+  };
+
+  const onSubmitDonate = () => {
+    console.log(selectedShelter);
+    console.log(selectedAmount);
   };
 
   const dispatch = useAppDispatch();
@@ -116,6 +134,7 @@ const Donation = () => {
                 title={item.shelter}
                 onPress={() => {
                   setSelectedShelter(item.shelter);
+                  setSelectedShelterProgress(item.progress);
                   onHandleExpanded();
                 }}
               />
@@ -126,6 +145,31 @@ const Donation = () => {
           <View />
         ) : (
           <View>
+            <List.Section title="Donation progress">
+              <View
+                style={[
+                  styles.progress,
+                  {
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                  },
+                ]}>
+                <Avatar.Icon icon="currency-usd" size={36} />
+                <View style={{ alignSelf: 'center' }}>
+                  <ProgressBar
+                    progress={selectedShelterProgress}
+                    visible
+                    color={Colors.teal500}
+                    style={{
+                      backgroundColor: theme.colors.primary,
+                      width: Dimensions.get('window').width - 100,
+                    }}
+                  />
+                </View>
+                <Avatar.Icon icon="bone" size={36} />
+              </View>
+            </List.Section>
+            <Divider />
             <List.Section title="Choose an amount">
               <View style={styles.row}>
                 <TouchableOpacity onPress={onHandleAmount('5$')}>
@@ -172,7 +216,14 @@ const Donation = () => {
               onPress={onHandleDonate}>
               Donate
             </Button>
-            <CustomDialog visible={visibleDialog} close={() => setVisibleDialog(!visibleDialog)} />
+            <CustomDialog
+              visible={visibleDialog}
+              close={() => setVisibleDialog(!visibleDialog)}
+              onSubmitDonate={() => {
+                onSubmitDonate();
+                setVisibleDialog(!visibleDialog);
+              }}
+            />
           </View>
         )}
       </ScrollView>
