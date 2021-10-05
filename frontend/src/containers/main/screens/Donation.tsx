@@ -20,7 +20,14 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
   },
-  headerContainer: { flexDirection: 'row', justifyContent: 'center' },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  shelterContainer: {
+    borderRadius: 50,
+    backgroundColor: theme.colors.primary,
+  },
   row: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -93,15 +100,15 @@ const Donation = () => {
         </View>
         <List.Section title="Select a shelter">
           <List.Accordion
-            titleStyle={{ color: 'black' }}
-            left={(props) => <List.Icon {...props} icon="home-search" />}
+            style={styles.shelterContainer}
+            left={() => <List.Icon icon="home-search" />}
             title={selectedShelter}
             expanded={expanded}
             onPress={onHandleExpanded}>
             {shelters.map((item) => (
               <List.Item
                 key={item.id}
-                left={(props) => <List.Icon {...props} icon="home" />}
+                left={() => <List.Icon icon="home" />}
                 title={item.shelter}
                 onPress={() => {
                   setSelectedShelter(item.shelter);
