@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
 const petSchema = new mongoose.Schema({
   name: {
@@ -20,6 +21,10 @@ const petSchema = new mongoose.Schema({
   description: {
     // Multiple description paragraphs
     type: [String],
+  },
+  shelter: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
   },
 });
 

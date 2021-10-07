@@ -20,7 +20,7 @@ router.get('/image/:key', verifyAccess, (req, res) => {
 // retrieve all available pets data for every users
 router.get('/all-pets', verifyAccess, async (req, res) => {
   try {
-    const pet = await Pet.find().exec();
+    const pet = await Pet.find().populate('shelter', 'email username contactNumber').exec();
     res.status(200).json(pet);
   } catch (err) {
     console.log(err);
@@ -147,6 +147,7 @@ router.post('/shelter-add-pet', upload.array('image', 3), verifyAccess, async (r
       age,
       images: imageKeys,
       description,
+      shelter: (req as any).userId,
     });
     // Add Pet's ID to list in shelter User document
     const shelterUser = await User.findById((req as any).userId).exec();
