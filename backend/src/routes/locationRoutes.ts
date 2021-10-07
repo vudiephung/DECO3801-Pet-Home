@@ -106,42 +106,40 @@ router.post(
 );
 
 // Filter zone based on states and cities req
-router.get('/filter-zone', verifyAccess, async( req: Request, res: Response, next: NextFunction ) => {
+router.get('/filter-zone', verifyAccess, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { state } = req.query;
     const { city } = req.query;
-    const result = await Zone.find({ state: state, city: city},' locality locations').exec();
+    const result = await Zone.find({ state: state, city: city }, ' locality locations').exec();
     res.status(200).json(result);
   } catch (err) {
-      console.log(err);
-      res.status(500).json({ error: 'Something went wrong' });
+    console.log(err);
+    res.status(500).json({ error: err });
   }
 });
 
-
 //  Fetch out all states and these cities in each state.
-router.get('/all-cities', verifyAccess, async(req: Request, res: Response, next: NextFunction) => {
-  try {  
-    const data = await Zone.find({},' -_id state city').exec();
+router.get('/all-cities', verifyAccess, async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await Zone.find({}, ' -_id state city').exec();
     //get the distinct cities in states.
     const distinct = [];
     const map = new Map();
     for (const item of data) {
-        if(!map.has(item.city)){
-            map.set(item.city, true);    // set states, cities to Map
-            distinct.push({
-                state: item.state,
-                city: item.city
-            });
-        }
+      if (!map.has(item.city)) {
+        map.set(item.city, true); // set states, cities to Map
+        distinct.push({
+          state: item.state,
+          city: item.city,
+        });
+      }
     }
     const result = helper.groupBy(distinct, 'state');
     res.status(200).json(result);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'Something went wrong'});
+    res.status(500).json({ error: err });
   }
 });
-
 
 export default router;
