@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { Card, Text, Title } from 'react-native-paper';
 import { useSelector } from 'react-redux';
 // @ts-ignore
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CardItem = ({ item, navigation, isFavPetScreen }: any) => {
+const BlogItem = ({ item }: any) => {
   const dispatch = useAppDispatch();
   const token = useSelector(fromUser.selectToken);
 
@@ -102,4 +102,4 @@ const CardItem = ({ item, navigation, isFavPetScreen }: any) => {
   );
 };
 
-export default CardItem;
+export default BlogItem;
