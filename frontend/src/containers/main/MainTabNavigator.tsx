@@ -4,7 +4,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useSelector } from 'react-redux';
 
 import Adoption from './screens/adoption';
-import Blog from './screens/Blog';
+import Blog from './screens/blog/Blog';
 import Donation from './screens/Donation';
 import Location from './screens/location';
 import theme from '../../core/theme';
