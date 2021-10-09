@@ -72,7 +72,6 @@ const Location = ({ navigation }) => {
       }
       const { coords } = await ExpoLocation.getCurrentPositionAsync({});
       setRegion({
-        ...region,
         latitude: coords.latitude,
         longitude: coords.longitude,
         latitudeDelta: 0.01844,
