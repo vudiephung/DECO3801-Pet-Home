@@ -1,9 +1,10 @@
 import { Router } from 'express';
 import * as jwt from 'jsonwebtoken';
-import bcrytp from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 import User, { hashPassword } from '../models/User';
 import secret from '../jwtSecret';
+import { verifyAdmin } from '../middleware/authMiddleware';
 
 const router = Router();
 
@@ -14,12 +15,8 @@ const createToken = (userId: string) => {
   });
 };
 
-router.get('/shelter-signup', (req, res, next) => {
-  res.render('shelter-signup');
-});
-
 // API only used for shelter user sign up
-router.post('/shelter-signup', async (req, res, next) => {
+router.post('/shelter-signup', verifyAdmin, async (req, res, next) => {
   const { email, username, password, address, contactNumber } = req.body;
   try {
     const hashedPassword = await hashPassword(password);
@@ -32,6 +29,7 @@ router.post('/shelter-signup', async (req, res, next) => {
       contactNumber,
       ownedPets: [],
       favoritePets: null,
+      likedPosts: null,
     });
     const token = createToken(user._id);
     res.status(201).json({
@@ -61,6 +59,7 @@ router.post('/signup', async (req, res) => {
       isShelter: false,
       ownedPets: null,
       favoritePets: [],
+      likedPosts: [],
     });
     const token = createToken(user._id);
     res.status(201).json({
@@ -80,9 +79,9 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate('likedPosts', '_id').exec();
   if (user) {
-    const passwordIsCorrect = await bcrytp.compare(password, user.password);
+    const passwordIsCorrect = await bcrypt.compare(password, user.password);
     if (passwordIsCorrect) {
       const token = createToken(user._id);
       if (user.isShelter) {
@@ -93,7 +92,7 @@ router.post('/signin', async (req, res) => {
           isShelter: true,
           address: user.address,
           contactNumber: user.contactNumber,
-          favouritePets: user.favouritePets,
+          ownedPets: user.ownedPets,
           token,
         });
       }
@@ -101,6 +100,8 @@ router.post('/signin', async (req, res) => {
         userId: user._id,
         email: user.email,
         username: user.username,
+        favoritePets: user.favoritePets,
+        likedPosts: user.likedPosts,
         isShelter: false,
         token,
       });

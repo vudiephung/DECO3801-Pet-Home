@@ -7,7 +7,7 @@ import { ManagedUpload } from 'aws-sdk/clients/s3';
 
 import * as S3 from '../utilities/s3';
 import verifyAccess from '../middleware/authMiddleware';
-import Zone from '../models/Zones';
+import Zone from '../models/Zone';
 import helperMethod from '../utilities/helper';
 
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });

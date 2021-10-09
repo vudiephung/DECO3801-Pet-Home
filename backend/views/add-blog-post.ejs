@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/global.css" />
+    <link rel="stylesheet" href="/form.css" />
+    <title>Pet Home | Add Blog Post</title>
+  </head>
+  <body>
+    <%- include("components/navbar") %>
+
+    <div id="submission-form">
+      <h1 id="form-title">Add A New Blog Post</h1>
+      <form action="/add-post" method="post" enctype="multipart/form-data">
+        <div class="form-item">
+          <label for="image">Thumbnail Image</label>
+          <input type="file" name="image" required />
+        </div>
+        <div class="form-item">
+          <label for="title">Blog Title</label>
+          <input type="text" name="title" required />
+        </div>
+        <div class="form-item">
+          <label for="snippet">Opening Snippet</label>
+          <textarea type="text" name="snippet" required></textarea>
+        </div>
+        <div class="form-item">
+          <label for="url">Article URL</label>
+          <input type="url" name="url" required />
+        </div>
+        <button>Post</button>
+      </form>
+    </div>
+
+    <%- include("components/footer") %>
+  </body>
+</html>
