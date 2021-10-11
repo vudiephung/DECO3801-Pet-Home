@@ -64,7 +64,7 @@ router.post('/react-post', verifyAccess, async (req: Request, res: Response, nex
 router.get('/blogs', verifyAccess, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await BlogPost.find().sort({ likeCount: -1}).exec();
-    console.log(data)
+    
     res.status(200).json(data);
   } catch (err) {
     console.log(err);
