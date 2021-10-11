@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -31,6 +32,9 @@ const userSchema = new mongoose.Schema({
   favoritePets: {
     // List of IDs. Only for user
     type: [String],
+  },
+  likedPosts: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'blogpost' }],
   },
 });
 

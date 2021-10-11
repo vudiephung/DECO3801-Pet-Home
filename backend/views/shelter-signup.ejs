@@ -4,20 +4,19 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/global.css" />
+    <link rel="stylesheet" href="/form.css" />
     <title>Pet Home | Shelter Signup</title>
   </head>
   <body>
-    <nav>
-      <h1>Pet Home</h1>
-    </nav>
+    <%- include("components/navbar") %>
 
-    <div id="signup-form">
-      <h2 id="form-title">Sign Up for Shelter User</h2>
+    <div id="submission-form">
+      <h1 id="form-title">Sign Up for Shelter User</h1>
       <form action="/shelter-signup" method="post">
         <div class="form-item">
           <label for="email">Email</label>
-          <input type="text" name="email" required />
+          <input type="email" name="email" required />
         </div>
         <div class="form-item">
           <label for="username">Username</label>
@@ -39,6 +38,6 @@
       </form>
     </div>
 
-    <div class="footer">Copyright &copy; DECO3801 | Team Resilience 2021</div>
+    <%- include("components/footer") %>
   </body>
 </html>

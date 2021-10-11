@@ -1,3 +1,4 @@
+import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { promises as fs } from 'fs';
 
@@ -10,6 +11,7 @@ const clearUploads = async (files: any) => {
     }
   }
 };
+
 const verifyAccess = (req: any, res: any, next: any) => {
   if (!req.header('Authorization')) {
     clearUploads(req.files);
@@ -32,6 +34,21 @@ const verifyAccess = (req: any, res: any, next: any) => {
       clearUploads(req.files);
       res.status(400).json({ error: 'Authentication failed: access denied' });
     }
+  }
+};
+
+export const verifyAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.cookies.adminToken;
+  if (token) {
+    jwt.verify(token, secret, (err: any) => {
+      if (err) {
+        res.redirect('/admin');
+      } else {
+        next();
+      }
+    });
+  } else {
+    res.redirect('/admin');
   }
 };
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/global.css" />
+    <link rel="stylesheet" href="/admin-signin.css" />
+    <title>Pet Home | Admin Sign-In</title>
+  </head>
+  <body>
+    <div class="signin-container">
+      <div class="signin-card">
+        <h1 id="form-title">Pet Home Admin</h1>
+        <form action="/admin">
+          <div class="form-item">
+            <label for="username">Username</label>
+            <input type="text" name="username" required />
+          </div>
+          <div class="form-item">
+            <label for="password">Password</label>
+            <input type="password" name="password" required />
+          </div>
+          <button>Sign In</button>
+        </form>
+      </div>
+    </div>
+
+    <%- include("components/footer") %>
+
+    <script>
+      const form = document.querySelector('form');
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const username = form.username.value;
+        const password = form.password.value;
+        try {
+          const response = await fetch('/admin', {
+            method: 'POST',
+            body: JSON.stringify({
+              username,
+              password,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const result = await response.json();
+          if (result.error) {
+            console.log(result.error);
+            location.assign('/admin');
+          }
+          if (result.success) {
+            location.assign('/shelter-signup');
+          }
+        } catch (err) {
+          location.assign('/admin');
+          console.log(err);
+        }
+      });
+    </script>
+  </body>
+</html>
