@@ -72,6 +72,9 @@ const blogsSlice = createSlice({
 
 const selectBlogsFeature = (state: any) => state[BLOGS_FEATURE_KEY];
 
+export const { selectAll: selectAllBlogs, selectEntities } =
+  BlogsAdapter.getSelectors(selectBlogsFeature);
+
 export const selectLoading = createSelector(selectBlogsFeature, (blogState) => blogState.loading);
 
 export default blogsSlice.reducer;
