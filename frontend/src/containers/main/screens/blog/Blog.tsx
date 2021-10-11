@@ -3,7 +3,7 @@ import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import BlogItem from './BlogItem';
-import { fromPets, useAppDispatch } from '../../../../store';
+import { fromBlogs, useAppDispatch } from '../../../../store';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -12,13 +12,13 @@ const styles = StyleSheet.create({
 const Blog = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const pets = useSelector(fromPets.selectAllPets);
+  const blogs = useSelector(fromBlogs.selectAllBlogs);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     (async () => {
       try {
-        await dispatch(fromPets.doGetPets());
+        await dispatch(fromBlogs.doGetBlogs());
       } catch (e) {
         console.log(e);
       }
@@ -32,15 +32,12 @@ const Blog = () => {
   };
 
   const renderItem = ({ item }: any) => {
-    const visible = item._id === selectedId;
     return (
       <BlogItem
         item={item}
         onPress={() => {
-          if (!selectedId) setSelectedId(item._id);
-          else setSelectedId(null);
+          // TO-DO
         }}
-        visible={visible}
       />
     );
   };
@@ -48,7 +45,7 @@ const Blog = () => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={pets}
+        data={blogs}
         renderItem={renderItem}
         keyExtractor={(item) => item._id}
         extraData={selectedId}

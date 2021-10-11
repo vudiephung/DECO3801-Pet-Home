@@ -1,12 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Card, Text, Title } from 'react-native-paper';
+import { Card, Paragraph, Text, Title } from 'react-native-paper';
 import { useSelector } from 'react-redux';
-// @ts-ignore
-import { SliderBox } from 'react-native-image-slider-box';
 
 import theme from '../../../../core/theme';
-import { fromUser, useAppDispatch } from '../../../../store';
+import { fromBlogs, fromUser, useAppDispatch } from '../../../../store';
 import { baseURL } from '../../../../services/config';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -31,7 +29,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    // textAlign: 'left',
     marginLeft: 20,
     marginRight: 0,
   },
@@ -56,38 +53,50 @@ const BlogItem = ({ item }: any) => {
   const token = useSelector(fromUser.selectToken);
 
   const handleLikeBlog = () => {
-    // TO-DO
+    dispatch(fromBlogs.doReactBlog(item));
   };
 
   const handleShareBlog = () => {
     // TO-DO
   };
 
-  const images = item.images.map((image: string) => {
+  const image = () => {
     return {
-      uri: `${baseURL}/image/${image}`,
+      uri: `${baseURL}/image/${item.image}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-  });
+  };
 
   return (
     <Card style={styles.card}>
-      <SliderBox images={images} />
+      <Card.Cover source={image()} />
       <Card.Content>
         <View style={styles.title}>
-          <Title>Blog Title</Title>
+          <Title>{item.title}</Title>
+        </View>
+        <View>
+          <Paragraph>{item.snippet}</Paragraph>
         </View>
         <View style={styles.likeShare}>
           <View style={styles.likes}>
-            <MaterialCommunityIcons
-              name="heart-outline"
-              color={theme.colors.error}
-              size={40}
-              onPress={handleLikeBlog}
-            />
-            <Text style={styles.likeCounter}>10</Text>
+            {!item.liked ? (
+              <MaterialCommunityIcons
+                name="heart-outline"
+                color={theme.colors.error}
+                size={40}
+                onPress={handleLikeBlog}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="heart"
+                color={theme.colors.error}
+                size={40}
+                onPress={handleLikeBlog}
+              />
+            )}
+            <Text style={styles.likeCounter}>{item.likeCount}</Text>
           </View>
           <MaterialCommunityIcons
             style={styles.share}

@@ -3,7 +3,7 @@ import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSelector } from 'react-redux';
 
-import Adoption from './screens/adoption';
+import Adoption from './screens/Donation';
 import Blog from './screens/blog/Blog';
 import Donation from './screens/Donation';
 import Location from './screens/location';
