@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Linking, Share } from 'react-native';
 import { Card, Paragraph, Text, Title } from 'react-native-paper';
 import { useSelector } from 'react-redux';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import theme from '../../../../core/theme';
 import { fromBlogs, fromUser, useAppDispatch } from '../../../../store';
 import { baseURL } from '../../../../services/config';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -57,7 +57,10 @@ const BlogItem = ({ item }: any) => {
   };
 
   const handleShareBlog = () => {
-    // TO-DO
+    Share.share({
+      url: item.url,
+      title: item.title,
+    });
   };
 
   const image = () => {
@@ -70,7 +73,7 @@ const BlogItem = ({ item }: any) => {
   };
 
   return (
-    <Card style={styles.card}>
+    <Card style={styles.card} onPress={() => Linking.openURL(item.url)}>
       <Card.Cover source={image()} />
       <Card.Content>
         <View style={styles.title}>
