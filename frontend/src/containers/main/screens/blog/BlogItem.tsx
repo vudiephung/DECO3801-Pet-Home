@@ -48,12 +48,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const BlogItem = ({ item }: any) => {
+const BlogItem = ({ item, likedPosts }: any) => {
   const dispatch = useAppDispatch();
   const token = useSelector(fromUser.selectToken);
-
+  if (!likedPosts) {
+    return null;
+  }
+  likedPosts = likedPosts.map((post: any) => post._id);
+  const isLiked = likedPosts.includes(item._id);
   const handleLikeBlog = () => {
-    dispatch(fromBlogs.doReactBlog(item));
+    dispatch(fromBlogs.doReactBlog({ blog: item, willLike: !isLiked }));
   };
 
   const handleShareBlog = () => {
@@ -81,7 +85,7 @@ const BlogItem = ({ item }: any) => {
         </View>
         <View style={styles.likeShare}>
           <View style={styles.likes}>
-            {!item.liked ? (
+            {!isLiked ? (
               <MaterialCommunityIcons
                 name="heart-outline"
                 color={theme.colors.error}

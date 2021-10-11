@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { doReactBlog } from './blogsSlice';
 
 import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
@@ -12,7 +13,6 @@ interface UserState {
   loading: boolean;
   didLogin: boolean;
   currentTab: string;
-  // errors: any[];
 }
 
 const tokenKey: string = 'token';
@@ -119,7 +119,6 @@ const userSlice = createSlice({
       state.user = null;
       state.loading = false;
       deleteData(tokenKey);
-      // state.errors.push(payload);
     });
     builder.addCase(doSignup.pending, (state) => {
       state.loading = true;
@@ -129,7 +128,6 @@ const userSlice = createSlice({
     });
     builder.addCase(doSignup.rejected, (state) => {
       state.loading = false;
-      // state.errors.push(payload);
     });
     builder.addCase(doSignout.pending, (state) => {
       state.loading = true;
@@ -151,6 +149,16 @@ const userSlice = createSlice({
         const index = state.user.favouritePets.indexOf(action.payload);
         if (index > -1) {
           state.user.favouritePets.splice(index, 1);
+        }
+      }
+    });
+    builder.addCase(doReactBlog.fulfilled, (state, action) => {
+      if (state.user && state.user.likedPosts) {
+        const { res, willLike } = action.payload;
+        if (!willLike) {
+          state.user.likedPosts = state.user.likedPosts.filter((b) => b['_id'] !== res._id);
+        } else {
+          state.user.likedPosts.push({ _id: res._id });
         }
       }
     });

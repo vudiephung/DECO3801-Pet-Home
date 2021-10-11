@@ -3,7 +3,7 @@ import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import BlogItem from './BlogItem';
-import { fromBlogs, useAppDispatch } from '../../../../store';
+import { fromBlogs, fromUser, useAppDispatch } from '../../../../store';
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
 const Blog = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const user = useSelector(fromUser.selectUser);
   const blogs = useSelector(fromBlogs.selectAllBlogs);
   const dispatch = useAppDispatch();
 
@@ -32,14 +33,7 @@ const Blog = () => {
   };
 
   const renderItem = ({ item }: any) => {
-    return (
-      <BlogItem
-        item={item}
-        onPress={() => {
-          // TO-DO
-        }}
-      />
-    );
+    return <BlogItem item={item} likedPosts={user?.likedPosts} />;
   };
 
   return (

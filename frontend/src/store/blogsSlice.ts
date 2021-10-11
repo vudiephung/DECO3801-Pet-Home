@@ -7,6 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import { Blog } from '../models/blog';
+import { User } from '../models/user';
 import { BlogsService } from '../services';
 import { reactBlog } from '../services/blogs';
 import { BLOGS_FEATURE_KEY } from './keywords';
@@ -14,6 +15,8 @@ import { BLOGS_FEATURE_KEY } from './keywords';
 const BlogsAdapter = createEntityAdapter<Blog>({
   selectId: (blog) => blog._id,
 });
+
+const UserAdapter = createEntityAdapter<User>();
 
 interface BlogState extends EntityState<Blog> {
   loading: boolean;
@@ -29,8 +32,7 @@ export const createInitialState = (): BlogState =>
 // eslint-disable-next-line consistent-return
 export const doGetBlogs = createAsyncThunk('/getBlogs', async () => {
   try {
-    const res = await BlogsService.getAllBlogs();
-    return res;
+    return await BlogsService.getAllBlogs();
   } catch (e) {
     console.log(`Cannot get blogs with error ${e}`);
   }
@@ -38,10 +40,11 @@ export const doGetBlogs = createAsyncThunk('/getBlogs', async () => {
 
 export const doReactBlog = createAsyncThunk(
   '/reactBlog',
-  async (blogInfo: Blog, { rejectWithValue }) => {
+  async (blogInfo: { blog: any; willLike: boolean }, { rejectWithValue }) => {
     try {
-      const res = await reactBlog(blogInfo);
-      return res;
+      const { blog, willLike } = blogInfo;
+      const res = await reactBlog(blog, willLike);
+      return { res, willLike };
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -65,7 +68,7 @@ const blogsSlice = createSlice({
     });
     builder.addCase(doReactBlog.fulfilled, (state, action) => {
       state.loading = false;
-      // BlogsAdapter.setAll(state, action.payload);
+      BlogsAdapter.setOne(state, action.payload.res);
     });
   },
 });

@@ -1,5 +1,4 @@
 import { Pet } from './pet';
-// import { Post } from './post';
 
 export interface User {
   userId: string;
@@ -11,6 +10,5 @@ export interface User {
   address?: string;
   contactNumber?: string;
   favouritePets?: Pet['_id'][];
-  // posts?: Post[];
-  // likedPosts?: Post[];
+  likedPosts?: any[];
 }

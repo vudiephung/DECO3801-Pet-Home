@@ -54,7 +54,7 @@ router.post('/react-post', verifyAccess, async (req: Request, res: Response, nex
     }
     post.save(); // await
     user.save(); // await
-    res.status(200).json({ success: 'Post Reaction Saved' });
+    res.status(200).json(post);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err });
