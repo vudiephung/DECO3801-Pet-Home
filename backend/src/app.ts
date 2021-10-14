@@ -1,10 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
 
 import verifyAccess from './middleware/authMiddleware';
 import authRouter from './routes/authRoutes';
 import adoptionRouter from './routes/adoptionRoutes';
 import locationRouter from './routes/locationRoutes';
+import blogRouter from './routes/blogRoutes';
+import adminRouter from './routes/adminRoutes';
 
 const app = express();
 
@@ -16,6 +19,7 @@ app.use(express.static('public'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -45,3 +49,7 @@ app.use(authRouter);
 app.use(adoptionRouter);
 
 app.use(locationRouter);
+
+app.use(blogRouter);
+
+app.use(adminRouter);

@@ -1,0 +1,53 @@
+.signin-container {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.signin-card {
+  background-color: #f4e4ba;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#form-title {
+  text-align: center;
+  margin: 0;
+  color: chocolate;
+}
+.form-item label {
+  display: block;
+  margin: 10px 0 3px 0;
+  font-size: 20px;
+}
+.form-item input {
+  width: 400px;
+  height: 30px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: larger;
+  font-family: 'Noto Sans', sans-serif;
+}
+form button {
+  margin-top: 30px;
+  height: 40px;
+  width: 150px;
+  color: aliceblue;
+  background-color: chocolate;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  font-weight: bold;
+  font-size: larger;
+}
+form button:hover {
+  background-color: brown;
+}
