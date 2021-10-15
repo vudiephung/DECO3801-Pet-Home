@@ -76,24 +76,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: theme.colors.error,
-    width: '55%',
+    width: '47%',
   },
   addFavButton: {
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: theme.colors.primary,
-    width: '55%',
+    width: '47%',
   },
   disabledButton: {
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: '#cccccc',
-    width: '55%',
+    width: '47%',
     color: '#666666',
   },
 });
 
-const CardItem = ({ item, onPress, visible, navigation, isFavPetScreen }: any) => {
+const CardItem = ({ item, onPress, visible, navigation, isFavPetScreen, openModal }: any) => {
   const dispatch = useAppDispatch();
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const token = useSelector(fromUser.selectToken);
@@ -137,11 +137,7 @@ const CardItem = ({ item, onPress, visible, navigation, isFavPetScreen }: any) =
 
     if (favPetIds && favPetIds.includes(itemId)) {
       return (
-        <Button
-          disabled
-          style={styles.disabledButton}
-          labelStyle={styles.buttonText}
-          onPress={handleAddFavoritePet}>
+        <Button disabled style={styles.disabledButton} labelStyle={styles.buttonText}>
           Added to Favorite
         </Button>
       );
@@ -165,12 +161,17 @@ const CardItem = ({ item, onPress, visible, navigation, isFavPetScreen }: any) =
       );
     }
     return (
-      <Button
-        style={styles.addFavButton}
-        labelStyle={styles.buttonText}
-        onPress={handleAddFavoritePet}>
-        Add to Favorite
-      </Button>
+      <View style={styles.cardButtons}>
+        <Button
+          style={styles.addFavButton}
+          labelStyle={styles.buttonText}
+          onPress={handleAddFavoritePet}>
+          Add to Favorite
+        </Button>
+        <Button style={styles.addFavButton} labelStyle={styles.buttonText} onPress={openModal}>
+          Contact Shelter
+        </Button>
+      </View>
     );
   };
 

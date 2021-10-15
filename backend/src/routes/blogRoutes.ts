@@ -52,8 +52,8 @@ router.post('/react-post', verifyAccess, async (req: Request, res: Response, nex
       const postIdIndex = user.likedPosts.indexOf(postId);
       user.likedPosts.splice(postIdIndex, 1);
     }
-    post.save(); // await
-    user.save(); // await
+    await post.save();
+    await user.save();
     res.status(200).json(post);
   } catch (err) {
     console.log(err);

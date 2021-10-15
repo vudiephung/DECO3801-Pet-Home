@@ -6,4 +6,10 @@ export interface Pet {
   age: number;
   images: string[];
   description: string[];
+  shelter?: {
+    username: string;
+    contactNumber: string;
+    email: string;
+    _id: string;
+  };
 }

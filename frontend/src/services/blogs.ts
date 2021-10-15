@@ -2,7 +2,11 @@
 import instance from './config';
 import { Blog } from '../models/blog';
 
-export const getAllBlogs = async () => (await instance.get('/blogs')).data;
+export const getAllBlogs = async () => {
+  const data = (await instance.get('/blogs')).data;
+  console.log('data', data);
+  return data;
+};
 
 export const reactBlog = async (blog: Blog, willLike: boolean) => {
   const res = await instance.post('/react-post', {
