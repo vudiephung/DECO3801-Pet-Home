@@ -49,19 +49,21 @@ const AdoptionFilter = () => {
     <View style={styles.column}>
       <View style={styles.row}>
         <Chip
-          style={{ backgroundColor: selectedDog ? theme.colors.active : theme.colors.surface }}
+          style={{ backgroundColor: selectedDog ? theme.colors.active : theme.colors.secondary }}
           selected={selectedDog}
           onPress={handlePressDog}>
           Dog
         </Chip>
         <Chip
-          style={{ backgroundColor: selectedCat ? theme.colors.active : theme.colors.surface }}
+          style={{ backgroundColor: selectedCat ? theme.colors.active : theme.colors.secondary }}
           selected={selectedCat}
           onPress={handlePressCat}>
           Cat
         </Chip>
         <Chip
-          style={{ backgroundColor: selectedHamster ? theme.colors.active : theme.colors.surface }}
+          style={{
+            backgroundColor: selectedHamster ? theme.colors.active : theme.colors.secondary,
+          }}
           selected={selectedHamster}
           onPress={() => {
             setSelectedHamster(!selectedHamster);
@@ -73,7 +75,7 @@ const AdoptionFilter = () => {
       </View>
       <View style={styles.row}>
         <Chip
-          style={{ backgroundColor: selectedMale ? theme.colors.active : theme.colors.surface }}
+          style={{ backgroundColor: selectedMale ? theme.colors.active : theme.colors.secondary }}
           selected={selectedMale}
           onPress={() => {
             setSelectedMale(!selectedMale);
@@ -82,7 +84,7 @@ const AdoptionFilter = () => {
           Male
         </Chip>
         <Chip
-          style={{ backgroundColor: selectedFemale ? theme.colors.active : theme.colors.surface }}
+          style={{ backgroundColor: selectedFemale ? theme.colors.active : theme.colors.secondary }}
           selected={selectedFemale}
           onPress={() => {
             setSelectedFemale(!selectedFemale);

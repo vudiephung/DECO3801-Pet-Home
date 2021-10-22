@@ -66,6 +66,11 @@ export const selectFilter = createSelector(selectLocationFeature, (locationState
   };
 });
 
+export const selectLoading = createSelector(
+  selectLocationFeature,
+  (locationState) => locationState.loading,
+);
+
 export const { doFilter } = locationSlice.actions;
 
 export default locationSlice.reducer;

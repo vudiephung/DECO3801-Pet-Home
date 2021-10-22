@@ -3,6 +3,8 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { AssetsSelector } from 'expo-images-picker';
 import { MediaType } from 'expo-media-library';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { useSelector } from 'react-redux';
 
 import theme from '../../../../core/theme';
 import { fromLocations, useAppDispatch } from '../../../../store';
@@ -17,6 +19,7 @@ const styles = StyleSheet.create({
 
 const LocationPickImages = ({ route, navigation }: any) => {
   const dispatch = useAppDispatch();
+  const loading = useSelector(fromLocations.selectLoading);
 
   const onSuccess = async (data: any) => {
     const images = data.map((element: any) => {
@@ -113,6 +116,12 @@ const LocationPickImages = ({ route, navigation }: any) => {
         Errors={widgetErrors}
         Styles={widgetStyles}
         Navigator={widgetNavigator}
+      />
+      <Spinner
+        visible={loading}
+        textContent="Loading..."
+        animation="fade"
+        textStyle={{ color: 'white' }}
       />
     </SafeAreaView>
   );
