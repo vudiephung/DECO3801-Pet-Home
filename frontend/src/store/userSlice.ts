@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { doReactBlog } from './blogsSlice';
 
+import { doReactBlog } from './blogsSlice';
 import { AuthService, PetsService } from '../services';
 import { User } from '../models/user';
 import { Pet } from '../models/pet';
@@ -156,7 +156,7 @@ const userSlice = createSlice({
       if (state.user && state.user.likedPosts) {
         const { res, willLike } = action.payload;
         if (!willLike) {
-          state.user.likedPosts = state.user.likedPosts.filter((b) => b['_id'] !== res._id);
+          state.user.likedPosts = state.user.likedPosts.filter((b) => b._id !== res._id);
         } else {
           state.user.likedPosts.push({ _id: res._id });
         }

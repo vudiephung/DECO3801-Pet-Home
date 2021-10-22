@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   addButton: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.button,
     borderRadius: 100,
     alignSelf: 'center',
     padding: 0,

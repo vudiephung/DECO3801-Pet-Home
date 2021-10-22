@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 
-import theme from '../../core/theme';
 import { getCities } from '../../services/locations';
 import { fromLocations, useAppDispatch } from '../../store';
 
@@ -13,7 +12,7 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   label: {
-    color: theme.colors.secondary,
+    color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
   },
@@ -21,7 +20,7 @@ const styles = StyleSheet.create({
 
 const pickerSelectStyles = StyleSheet.create({
   inputAndroid: {
-    color: theme.colors.secondary,
+    color: 'white',
     marginVertical: 12,
   },
 });

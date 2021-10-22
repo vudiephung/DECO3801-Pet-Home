@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 
 import BlogItem from './BlogItem';
@@ -15,6 +16,10 @@ const Blog = () => {
   const user = useSelector(fromUser.selectUser);
   const blogs = useSelector(fromBlogs.selectAllBlogs);
   const dispatch = useAppDispatch();
+
+  useFocusEffect(() => {
+    dispatch(fromUser.doChangeCurrentTab('blog'));
+  });
 
   useEffect(() => {
     (async () => {

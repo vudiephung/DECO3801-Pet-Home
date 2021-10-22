@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   shelterContainer: {
     borderRadius: 50,
-    backgroundColor: theme.colors.primary,
+    backgroundColor: 'white',
   },
   title: {
     color: Colors.black,
@@ -50,12 +50,15 @@ const styles = StyleSheet.create({
     margin: 8,
   },
   avatar: {
-    margin: 8,
+    margin: 10,
+  },
+  label: {
+    fontSize: 22,
   },
   donateButton: {
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.button,
     width: '55%',
   },
   buttonText: {
@@ -159,7 +162,7 @@ const Donation = () => {
                   <ProgressBar
                     progress={selectedShelterProgress}
                     visible
-                    color={Colors.teal500}
+                    color={theme.colors.active}
                     style={{
                       backgroundColor: theme.colors.primary,
                       width: Dimensions.get('window').width - 100,
@@ -174,11 +177,13 @@ const Donation = () => {
               <View style={styles.row}>
                 <TouchableOpacity onPress={onHandleAmount('5$')}>
                   <Avatar.Text
+                    color="white"
+                    labelStyle={styles.label}
                     style={[
                       styles.avatar,
                       {
                         backgroundColor:
-                          selectedAmount === '5$' ? theme.colors.active : theme.colors.primary,
+                          selectedAmount === '5$' ? theme.colors.active : theme.colors.secondary,
                       },
                     ]}
                     label="5$"
@@ -186,11 +191,13 @@ const Donation = () => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onHandleAmount('10$')}>
                   <Avatar.Text
+                    color="white"
+                    labelStyle={styles.label}
                     style={[
                       styles.avatar,
                       {
                         backgroundColor:
-                          selectedAmount === '10$' ? theme.colors.active : theme.colors.primary,
+                          selectedAmount === '10$' ? theme.colors.active : theme.colors.secondary,
                       },
                     ]}
                     label="10$"
@@ -198,11 +205,13 @@ const Donation = () => {
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onHandleAmount('20$')}>
                   <Avatar.Text
+                    color="white"
+                    labelStyle={styles.label}
                     style={[
                       styles.avatar,
                       {
                         backgroundColor:
-                          selectedAmount === '20$' ? theme.colors.active : theme.colors.primary,
+                          selectedAmount === '20$' ? theme.colors.active : theme.colors.secondary,
                       },
                     ]}
                     label="20$"

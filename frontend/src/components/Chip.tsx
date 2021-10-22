@@ -2,8 +2,6 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Chip as PaperChip } from 'react-native-paper';
 
-import theme from '../core/theme';
-
 type Props = React.ComponentProps<typeof PaperChip>;
 
 const styles = StyleSheet.create({
@@ -11,7 +9,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   text: {
-    color: theme.colors.secondary,
+    color: 'white',
     fontWeight: 'bold',
   },
 });

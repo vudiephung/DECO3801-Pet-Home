@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   addFavButton: {
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.button,
     width: '47%',
   },
   disabledButton: {
