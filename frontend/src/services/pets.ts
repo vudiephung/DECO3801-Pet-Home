@@ -10,8 +10,8 @@ export const addPet = async (
   formData.append('type', pet.type);
   formData.append('breed', pet.breed);
   formData.append('age', pet.age.toString());
-  pet.description.forEach((item) => {
-    formData.append('description', item);
+  pet.description.forEach((item, i) => {
+    formData.append(`description[${i}]`, item);
   });
   images.forEach((item) => {
     formData.append('image', { uri: item.uri, type: 'image/jpeg', name: item.name });
@@ -35,11 +35,11 @@ export const editPet = async (
   formData.append('type', pet.type);
   formData.append('breed', pet.breed);
   formData.append('age', pet.age.toString());
-  pet.description.forEach((item) => {
-    formData.append('description', item);
+  pet.description.forEach((item, i) => {
+    formData.append(`description[${i}]`, item);
   });
-  imagesToDelete.forEach((item) => {
-    formData.append('imagesToDelete', item);
+  imagesToDelete.forEach((item, i) => {
+    formData.append(`imagesToDelete[${i}]`, item);
   });
   newImages.forEach((item) => {
     formData.append('image', { uri: item.uri, type: 'image/jpeg', name: item.name });

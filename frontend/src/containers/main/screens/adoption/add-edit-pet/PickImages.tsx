@@ -73,9 +73,10 @@ const PickImages = ({ route, navigation }: any) => {
   const dispatch = useAppDispatch();
   const { petData, mode, currentImages } = route.params;
 
-  const [uploadedList, setUploadedList] = currentImages
-    ? useState<string[]>([...currentImages])
-    : useState<string[]>([]);
+  const [uploadedList, setUploadedList] = useState<string[]>(
+    currentImages ? [...currentImages] : [],
+  );
+
   const deletedImageIds = useRef<string[]>([]);
 
   const onSuccess = async (data: any) => {

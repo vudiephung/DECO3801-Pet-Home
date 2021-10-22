@@ -76,7 +76,7 @@ const EditPet = ({ route, navigation }: any) => {
           label="Age"
           keyboardType="numeric"
           maxLength={3}
-          value={age?.toString()}
+          value={age == 0 ? undefined : age!.toString()}
           onChangeText={(value) => setAge(+value)}
         />
         <TextInput
@@ -85,9 +85,10 @@ const EditPet = ({ route, navigation }: any) => {
           numberOfLines={7}
           value={(() => {
             let desString = '';
-            for (const paragraph of description) {
-              desString = `${desString + paragraph}\n`;
+            for (let i = 0; i < description.length - 1; i++) {
+              desString = `${desString + description[i]}\n`;
             }
+            desString = desString + description[description.length - 1];
             return desString;
           })()}
           onChangeText={(value) => setDescription(value.split(/\r?\n/))}
