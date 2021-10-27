@@ -3,12 +3,12 @@ import { Image, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   image: {
-    width: 128,
-    height: 128,
+    width: 226,
+    height: 226,
     marginBottom: 12,
   },
 });
 
-const Logo = () => <Image source={require('../assets/pet-dog.png')} style={styles.image} />;
+const Logo = () => <Image source={require('../assets/logo.png')} style={styles.image} />;
 
 export default memo(Logo);
